@@ -1,0 +1,42 @@
+.new-popup-wrapper{
+    width:340px;
+    position:relative;
+    z-index:1;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0, .1);
+    padding-top:1rem;
+    padding-bottom:1rem;
+    box-shadow:0 4px 8px rgba(51,3,0,.7)
+}
+
+.new-popup-item{
+    display:flex;
+    justify-content:start;
+    align-items:center;
+    padding:7.5px;
+    font-family:arial;
+}
+
+.new-popup-item:hover{
+    background-color:rgba(0,0,0,.055);
+}
+
+.new-icon-wrapper{
+    margin-left:1rem;
+    width:35px;
+}
+
+.myhr1{
+    background-color:rgba(0,0,0,.085);
+}
+
+.myhr{
+    height:.5px;
+    background-color:rgba(0,0,0,.085);
+    margin-top:.25rem;
+    margin-bottom:.5rem;
+}
+
+#folder-upload{
+    margin-top:.25rem;
+}

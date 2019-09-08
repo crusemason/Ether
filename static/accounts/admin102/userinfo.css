@@ -1,0 +1,157 @@
+.userinfo-wrapper{
+    width:330px;
+    background-color:white;
+    border:1px solid rgba(0,0,0,.3);
+    height:204px;
+    flex-direction:column;
+    border-radius:2px;
+    justify-content:start
+    display:flex;
+    box-shadow:2px 2px 6px rgba(0,0,0, 0.4);
+}
+.userinfo-header{
+    display:flex;
+    margin-top:1rem;
+
+}
+
+.user-logo{
+    width:105px;
+    margin-left:1rem;
+    height:105px;
+    background-color:brown;
+    color:white;
+    font-family:arial;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+}
+.user-logo span{
+    font-size:4em;
+}
+
+.user-details{
+    margin-left:auto;
+    margin-right:1rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:start;
+}
+.email{
+    font-size:.8em;
+}
+
+.userinfo-btn-wrapper{
+    display:flex;
+    align-items:center;
+    margin-top:2rem;;
+    border:1px solid rgba(0,0,0,.4);
+    border-left:none;
+    border-right:none;
+    border-bottom:none;
+    background-color:rgba(0,0,0,.03);
+    height:50px;
+}
+.sign-out{
+    margin-left:auto;
+    margin-right:1.3rem;
+    height:30px;
+}
+.add-account{
+    margin-left:1.3rem;
+    height:30px;
+}
+
+.privacy{
+    margin-top:.5rem;
+}
+
+
+.ether-account:focus{
+    outline:0;
+}
+.ether-account{
+    margin-top:1rem;
+    height:30px;
+    border-radius:2px;
+    background-color:#4d90fe;
+    color:white;
+    border-color:#3079ed;
+    display:flex;
+    align-items:center;
+    padding:0 .9rem;
+    font-family:arial;
+    font-size:.9em;
+}
+
+.ether-account-link{
+    text-decoration:none;
+    display:flex;
+}
+.add-link{
+    text-decoration:none;
+    color:rgba(0,0,0,.8);
+    border-radius:2px;
+}
+.add-account{
+    border-radius:2px;
+    padding:0 .5rem;
+background-color:rgba(255,255,255,.1);
+    border-radius:2px;
+    border:1px solid rgba(0,0,0,.4);
+    color:rgba(0,0,0,.6);
+    display:flex;
+    height:30px;
+    font-size:.9em;
+    align-items:center;
+    justify-content:center;
+    font-family:arial;
+
+
+}
+.signout-link{
+    margin-left:auto;
+    margin-right:1.2rem;
+    color:rgba(0,0,0,.6);
+    text-decoration:none;
+    border-radius:2px;
+}
+.add-account:hover{
+    background-color:white;
+    box-shadow:0 1.5px 2px -2px rgba(0,0,0,.7);
+}
+.signout:hover{
+    background-color:white;
+    box-shadow:0 1.5px 2px -2px rgba(0,0,0,.7);
+}
+.signout{
+    background-color:rgba(255,255,255,.1);
+    border-radius:2px;
+    padding:0 .5rem;
+    border:1px solid rgba(0,0,0,.4);
+    color:rgba(0,0,0,.6);
+    height:30px;
+    display:flex;
+    font-family:arial;
+    font-size:.9em;
+    align-items:center;
+    justify-content:center;
+
+}
+
+.privacy-link{
+    text-decoration:none;
+    color:#3366cc;
+    font-family:arial;
+    font-size:.8em;
+}
+.email{
+    color:rgba(0,0,0,.65);
+    font-family:arial;
+}
+.username{
+    font-weight:bold;
+    font-family:arial;
+    font-size:.8em;
+}

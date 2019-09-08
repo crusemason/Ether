@@ -1,0 +1,41 @@
+{% extends 'html/base.html' %}
+
+{% load staticfiles %}
+
+
+{% block content %}
+    {{user.username}}
+    <h1>Content</h1>
+    <form action="/uploads/handle_upload/" method="POST" enctype='multipart/form-data'>
+<input id='filepicker' type='file' name='file_field' webkitdirectory > 
+<button id="btnPlus">click test</button>
+    </form>
+{% endblock %}
+{% block content1 %}
+    {% if image_list %}
+        {% for image in image_list %}
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+
+        {% endif %}
+{% endblock %}
+{% block js %}
+<script src="{% static "js/bbase.js" %}"></script>
+{% endblock %}
+  
+
