@@ -1,0 +1,69 @@
+{% extends 'html/subfolderbase.html' %}
+
+{% load staticfiles %}
+{% block link %}
+<link rel="stylesheet" href="{% static "css/my-drive.css" %}">
+<link rel="stylesheet" href="{% static "css/folders.css" %}">
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}
+{% block content1 %}
+<div>
+{% if folder_list %}
+ <div class="folders-title">Folders</div>
+ <div class="folders-wrapper">
+             {% for folder in folder_list %}
+             <a href="{% url  'subfolder' folder.id %}">
+             <div class="foldercontainer">
+                 <i id="folder" class="fas fa-folder fa-lg icon"></i>
+                 <span>{{folder.name}}</span>
+             </div>
+             </a>
+             {% endfor %}
+ </div>      
+ {% endif %}
+
+
+
+
+</div>
+
+<div>
+    <div class="files-title">Files</div>
+    {% if image_list %}
+    <div class="filesflex">
+        {% for image in image_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' or 'jpg' or 'png' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static "js/bbase.js" %}"></script>
+{% endblock %}
+  
+

@@ -28,4 +28,18 @@ urlpatterns = [
     path('', upload_views.home, name='home'),
 
     path('uploads/', include('uploads.urls')),
+    path('rootfolder/', upload_views.rootfolder),
+    path('uploadfileat/', upload_views.uploadfileat),
+    path('trash/', upload_views.allTrash),
+    path('starred/', upload_views.allStarred),
+    path('makesubfolder/', upload_views.makesubfolder),
+    path('subfolder/<int:pk>/', upload_views.subfolder, name='subfolder'),
+    url(r'^trash/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.trash, name='trash'),
+    url(r'^download/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.download, name='download'),
+    url(r'^star/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.star, name='star'),
+    url(r'^removestar/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.removestar, name='removestar'),
+    url(r'^ajax/validate_username/$', upload_views.validate_upload,                name='validate_upload'),
+    path('my_view_that_updates_pieFact/', upload_views.my_view_that_updates_pieFact),
+
+
 ]

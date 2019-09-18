@@ -8,6 +8,13 @@ function t(ele){
     console.log('.file-info'+ele);
     $('.sub-wrapper').css('display', 'block');
     $('.vert').css('display', 'block');
+    if (ele != null){
+
+    console.log(ele);
+    // adding '-' the middle of name and id for regex
+    var s = ele.substring(0,1) + '-' + ele.substring(1)
+    }
+    document.getElementById('subhtrash').href = '/trash/' + s;
 
     $('.file-info').css('background', '#ffffff');
     $('.file-info').css('color', 'black');
@@ -40,8 +47,7 @@ document.addEventListener("click", function(event){
 
     }
     else if (event.target.closest('.filecontainer-wrapper')){
-        console.log("filecontainer-wrapper");
-    }
+            }
     else if (event.target.closest('.user-info')){
         console.log("user-info");
     }

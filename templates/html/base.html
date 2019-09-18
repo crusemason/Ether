@@ -2,9 +2,10 @@
 <head>
     {% load static %}
   {% block js %}
+
   {% endblock %}
 
-
+<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -14,8 +15,16 @@
     <link rel="stylesheet" href="{% static "css/userinfo.css" %}">
     <link rel="stylesheet" href="{% static "css/filecontainer.css" %}">
     <link rel="stylesheet" href="{% static "css/newfolder.css" %}">
+    <link rel="stylesheet" href="{% static "css/contextmenu.css" %}">
+<script src="{% static "js/contextmenu.js"%}"></script>
+{% block link %}
+{% endblock %}
+
 <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script>
+            var URL = "{% url 'my_view_that_updates_pieFact' %}";
+    </script>
 
 
 </head>
@@ -25,11 +34,13 @@
         <i id="newfolder-close" class="fas fa-times" onClick="newFolderClose()"></i>
     </div>
     <div class="newfolder-r1">
+        <form id='newfolderform' method='post' action='/rootfolder/'>
         <input type="text" name="newfolder-q" class="newfolder-q">
+        </form>
     </div>
     <div class="newfolder-r2">
         <a href="#" class="close-link" onClick="newFolderClose()"><div class="newfolder-cancel">CANCEL</div></a>
-        <a href="#" class="create-link"><div class="newfolder-create">CREATE</div></a>
+        <a href="#" class="create-link"><div onclick="document.getElementById('newfolderform').submit();" class="newfolder-create">CREATE</div></a>
     </div>
 </div>
  
@@ -46,18 +57,27 @@
           <div class="new-icon-wrapper"><i class="far fa-hdd"></i></div>
           <span>Folder<span>
       </div>
-      <div class="myhr"></div>
-      <div class="new-popup-item">
+      <hr />
+      <div class="new-popup-item" id="fileuploaditem">
           <div class="new-icon-wrapper"><i class="far fa-hdd"></i></div>
           <span>File upload<span>
      </div>
-      <div class="new-popup-item">
-          <div id="folder-upload" class="new-icon-wrapper"><i class="far fa-hdd"></i></div>
-          <span>Folder upload<span>
+      <div class="new-popup-item" id='formitem'>
+          <div class="folderupload-wrapper">
+          <form id="folderuploadform" method="post" action='/uploads/handle_upload/' enctype='multipart/form-data' onsubmit="updatePieFact();" onchange="$(this).submit();">
+          <label id="folderupload">
+          <i id='folderuploadicon' class="far fa-hdd"></i>
+          Folder upload
+          </label>
+
+
+<form action="/uploads/handle_upload/" method="POST" enctype='multipart/    form-data' name='folderform'>
+ <input id='filepicker' class='folderuinput' type='file' name='file_field' webkitdirectory            >
+     </form>
+          </div>
+
      </div>
-      <div class="myhr"></div>
-      <div class="myhr"></div>
-      <div class="myhr1"></div>
+      <hr id="new-hr">
       <div class="new-popup-item">
           <div class="new-icon-wrapper"><i class="far fa-hdd"></i></div>
           <span>Ether Doc<span>
@@ -78,7 +98,7 @@
     </div>
     
    <div class="nav-ul">
-        <a class="nav-link active" >
+        <a class="nav-link active" href="/uploads/mydrive/" >
             <div class="nav-item active">
                 <div class="icon-wrapper">
                     <i class="far fa-hdd fa-lg"></i>
@@ -89,31 +109,31 @@
         <a class="nav-link">
             <div class="nav-item">
                 <div class="icon-wrapper">
-                    <i class="far fa-hdd fa-lg"></i>
+                    <i class="fas fa-share fa-lg"></i>
                 </div>
                 <span>Shared with me</span>
             </div>
         </a>
-        <a class="nav-link">
+        <a class="nav-link" href='/uploads/recent/'>
             <div class="nav-item">
                 <div class="icon-wrapper">
-                    <i class="far fa-hdd fa-lg"></i>
+                    <i class="fas fa-clock fa-lg"></i>
                 </div>
                 <span>Recent</span>
             </div>
         </a>
-        <a class="nav-link">
+        <a class="nav-link" href="/starred/">
             <div class="nav-item">
                 <div class="icon-wrapper">
-                    <i class="far fa-hdd fa-lg"></i>
+                    <i class="far fa-star fa-lg"></i>
                 </div>
                 <span>Starred</span>
             </div>
         </a>
-        <a class="nav-link">
+        <a class="nav-link" href="/trash/">
             <div class="nav-item">
                 <div class="icon-wrapper">
-                    <i class="far fa-hdd fa-lg"></i>
+                    <i class="fas fa-trash fa-lg"></i>
                 </div>
                 <span>Trash</span>
             </div>
@@ -122,7 +142,7 @@
         <a class="nav-link" id="backups">
             <div class="nav-item">
                 <div class="icon-wrapper">
-                    <i class="far fa-hdd fa-lg"></i>
+                    <i class="fas fa-upload fa-lg"></i>
                 </div>
                 <span>Backups</span>
             </div>
@@ -142,7 +162,7 @@
 
 
   <div class="header">
-      <input type="text" name='search' class='search'placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome" />
+      <input type="text" name='search' class='search'placeholder="&#xF002;    Search Drive" style="font-family:Arial, FontAwesome" />
       <div class="header-icon-wrapper">
           <div id="circle">
           <i class="far fa-question-circle fa-lg"></i>
@@ -179,7 +199,7 @@
          </div>
              <div class="userinfo-btn-wrapper">
                  <a class="add-link" href="#"><div class="add-account">Add Account</div></a>
-                 <a class="signout-link" href="#"><div class="signout">Sign out</div></a>
+                 <a class="signout-link" href="/users/logout/"><div class="signout">Sign out</div></a>
              </div>
      </div>
    <div id="subheader-h">
@@ -199,9 +219,11 @@
           <div id="circle">
           <i class="fas fa-eye fa-lg"></i>
           </div>
+          <a href='#' id='subhtrash'>
           <div id="circle">
           <i class="fas fa-trash fa-lg"></i>
           </div>
+          </a>
           <div id="circle">
           <i class="fas fa-ellipsis-v fa-lg"></i>
           </div>
@@ -230,4 +252,140 @@
   </div>
   <div>
 
+<!-- initially hidden right-click menu -->
+<div class="hide" id="rmenu">
+  <ul>
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="x" class="fas fa-times "></i>
+          </div>
+          Preview</a>
+    </li>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="arrows" class="fas fa-arrows-alt"></i>
+          </div>
+          Open with</a>
+    </li>
+
+    <hr>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i  class="fas fa-share-square"></i>
+          </div>
+          Share</a>
+    </li>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="fas fa-link"></i>
+          </div>
+          Get shareable link</a>
+    </li>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="folderplus" class="far fa-folder"></i>
+          </div>
+          Show file location</a>
+    </li>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="folderplus" class="far fa-folder"></i>
+          </div>
+          Move to</a>
+    </li>
+
+    <li id="starred">
+      <a id="addtostar" href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="far fa-star"></i>
+          </div>
+          Add to starred</a>
+    </li>
+
+
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="fas fa-pencil-alt"></i>
+          </div>
+          Rename</a>
+    </li>
+
+    <hr>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="far fa-copy"></i>
+          </div>
+          Make a copy</a>
+    </li>
+
+    <li>
+      <a href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="far fa-hand-paper"></i>
+          </div>
+          Report abuse</a>
+    </li>
+
+    <li>
+        <a id='download' href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="fas fa-download"></i>
+          </div>
+          Download</a>
+    </li>
+
+    <hr>
+
+    <li id='trash'>
+      <a id='addtotrash' href="#">
+          <div class="cm-icon-wrapper">
+            <i id="link" class="fas fa-trash"></i>
+          </div>
+          Remove</a>
+    </li>
+
+  </ul>
+</div>
+<script>
+        var pie = [];
+document.getElementById("filepicker").addEventListener("change", function(event) {
+  let files = event.target.files;
+
+  for (let i=0; i<files.length; i++) {
+    pie.push(files[i].webkitRelativePath);
+    updatePieFact(pie[i]);
+    console.log(pie[i]);
+  };
+}, false);
+function updatePieFact(pieFact){
+    var data = {'pieFact': pieFact};
+    $.post(URL, data, function(response){
+        if(response === 'success'){ console.log('Yay!'); }
+        else{ console.log('Error! :('); }
+    });
+}
+$(document).ready(function(){
+    $('#btnPlus').click(function(){
+        pieFact *= 1.1;
+        updatePieFact();
+    });
+});
+
+
+</script>
 </html>

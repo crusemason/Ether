@@ -4,18 +4,22 @@
 
 
 {% block content %}
+<div class='foob'>
     {{user.username}}
     <h1>Content</h1>
     <form action="/uploads/handle_upload/" method="POST" enctype='multipart/form-data'>
-<input id='filepicker' type='file' name='file_field' webkitdirectory > 
+<input id='filepicker' type='file' name='file_field' webkitdirectory onchange='form.submit()'> 
 <button id="btnPlus">click test</button>
     </form>
+</div>
 {% endblock %}
 {% block content1 %}
     {% if image_list %}
         {% for image in image_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
         <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
-            <div id="fcontent" class="content{{image.id}} file-content" onclick='t()'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
             {% if 'jpeg' in image.file_type %}
             <img id="img" src="{% static image.path  %}"> 
             {% endif %}
@@ -30,6 +34,8 @@
             </div>
         </div>
         </div>
+        </a>
+            {% endif %}
         {% endfor %}
 
         {% endif %}

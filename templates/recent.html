@@ -1,0 +1,128 @@
+{% extends 'html/base.html' %}
+
+{% load staticfiles %}
+{% block link %}
+<link rel="stylesheet" href="{% static "css/my-drive.css" %}">
+<link rel="stylesheet" href="{% static "css/folders.css" %}">
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}
+{% block content1 %}
+    {% if image_list %}
+    <div class="files-title">Today</div>
+    <div class="filesflex">
+        {% for image in image_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        {% endif %}
+    </div>
+    {% if week_list %}
+    <div class="files-title">Earlier this week</div>
+    <div class="filesflex">
+        {% for image in week_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        {% endif %}
+{% if month_list %}
+    <div class="files-title">Earlier this month</div>
+    <div class="filesflex">
+        {% for image in month_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        {% endif %}
+{% if year_list %}
+    <div class="files-title">Earlier this year</div>
+    <div class="filesflex">
+        {% for image in year_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' in image.file_type %}
+            <img id="img" src="{% static image.path  %}"> 
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                {{ image.name }}
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        {% endif %}
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{% static "js/bbase.js" %}"></script>
+{% endblock %}
+  
+

@@ -1,0 +1,116 @@
+{% extends 'html/base.html' %}
+
+{% load staticfiles %}
+{% block link %}
+<link rel="stylesheet" href="{% static "css/folders.css" %}">
+<link rel="stylesheet" href="{% static "css/qafilecontainer.css" %}">
+    <script>
+        $("#filepicker").change(function(){
+            console.log($(this).val());
+
+
+   $.ajax({
+        url: '/ajax/validate_upload/',
+        data: {
+          'file_field':file_field 
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this username already exists.");
+          }
+        }
+      });
+        });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+<div class='foob'>
+</div>
+{% endblock %}
+{% block content1 %}
+    <div class="qafiles-title">Quick Access</div>
+    {% if qa_list %}
+        <div class="qafileflex">
+        {% for image in qa_list %}
+        {% if image.trash == False %}
+        <a href="#" class="qafilea">
+            <div class='qawrapper'>
+            <div class='qacontent'>
+                {% if 'jpeg' or 'png' or 'jpg' in image.file_type %}
+                    <img id="qaimg" src="{% static image.path  %}"> 
+                {% endif %}
+            </div>
+            <div class='qafooter'>
+                <div class='qafooterwrapper'>
+                <div class='qanamewrapper'>
+                    <i id='qaicon' class="far fa-file-image fa-lg icon"></i>
+                    <span class='qaname'>{{ image.name }}</span>
+                </div>
+                <div class='qadate'>
+                    {{ image.modified }}
+                </div>
+                </div>
+            </div>
+            </div>
+
+
+        </a>
+        {% endif %}
+        {% endfor %}
+
+        </div>
+    {% endif %}
+
+ 
+{% if folder_list %}
+<div class="folders-title">Folders</div>
+<div class="folders-wrapper">
+            {% for folder in folder_list %}
+            <a  href="{% url  'subfolder' folder.id %}">
+            <div class="foldercontainer">
+                <i id="folder" class="fas fa-folder fa-lg icon"></i>
+                <span>{{folder.name}}</span>
+            </div>
+            </a>
+            {% endfor %}
+</div>
+{% endif %}
+
+    <div class="files-title">Files</div>
+    {% if image_list %}
+        <div class="fileflex">
+        {% for image in image_list %}
+        {% if image.trash == False %}
+        <a href="#" class="file">
+            <div id="f{{image.id}}" class="filecontainer-wrapper f-{{image.id}}" onClick='t(this.id)'>
+            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
+            {% if 'jpeg' or 'png' in image.file_type %}
+            <img id="img" src="{% static image.path  %}">
+            {% endif %}
+            {% if image.images %}
+            {% endif %}
+        </div>
+        
+        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
+            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
+            <div class="filecontainer-filename" onclick='t()'>
+                <span class='fname'>{{ image.name }}</span>
+            </div>
+        </div>
+        </div>
+        </a>
+            {% endif %}
+        {% endfor %}
+
+        </div>
+        {% endif %}
+        
+{% endblock %}
+{% block js %}
+<script src="{% static "js/bbase.js" %}"></script>
+{% endblock %}
+  
+

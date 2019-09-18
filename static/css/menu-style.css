@@ -1,5 +1,6 @@
 .new-popup-wrapper{
     margin-top:.81rem;
+    z-index:999;
     margin-left:.81rem;
     background-color:white;
     display:none;
@@ -20,6 +21,7 @@
     padding:7.5px;
     font-size:1.2em;
     font-family:arial;
+    position:relative;
 }
 
 .new-popup-item:hover{
@@ -44,4 +46,66 @@
 
 #folder-upload{
     margin-top:.25rem;
+}
+.folderform{
+    position:absolute;
+    padding:0 0;
+}
+#formitem{
+    padding:0 0;
+    display:flex;
+    align-items:center;
+    justify-content:start;
+    flex-wrap:nowrap;
+}
+#folderupload{
+
+    padding:0 0;
+    margin-left:1.45rem;
+    margin-right:1rem;
+    width:200px;
+    display:flex;
+    position:absolute;
+    top:10;
+    align-items:center;
+    justify-content:start;
+    flex-wrap:nowrap;
+}
+.folderupload-wrapper{
+    display:flex;
+    word-break:keep-all;
+    height:40px;
+    align-items:center;
+    justify-content:start;
+    flex-wrap:nowrap;
+}
+.folderuinput{
+    width:340px;
+    height:40px;
+}
+#folderuploadicon{
+    margin-right:.9rem;
+}
+#new-hr1{
+  border: 0;
+  clear:both;
+  display:block;
+  width: 96%;               
+  margin:1rem 0;
+  background-color:black;
+  border:1px solid black;
+  height: 1px;
+}
+#new-hr{
+  border: 0;
+  clear:both;
+  display:block;
+  width: 100%;               
+  background-color:rgba(0,0,0,.2);
+  height: 1px;
+}
+#fileuploaditem{
+}
+#newfolder{
+    margin-bottom:1rem;
 }
