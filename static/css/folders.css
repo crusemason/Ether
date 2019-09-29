@@ -12,10 +12,11 @@
     display:flex;
     flex-wrap:wrap;
     align-items:start;
+    justify-content:start;
 }
 
 .foldercontainer{
-    width:280px;
+    width:200px;
     border-radius:4px;
         color:rgba(0,0,0,.6);
     display:flex;
@@ -23,7 +24,7 @@
     margin:.5rem;
     align-items:center;
     justify-content:start;
-    height:60px;
+    height:48px;
     border:1px solid rgba(0,0,0,.2);
     font-family:arial;
 }

@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template import Template
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .models import File, Folder
+from .models import File, Folder, Photo
 from accounts.models import Profile
 from django.core.files import File as DjangoFile
 from datetime import date
@@ -14,6 +14,21 @@ from datetime import datetime
 from datetime import timedelta
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views import View
+import time
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.views import View
+
+from .forms import PhotoForm
+from .models import Photo
+
+from .forms import PhotoForm
+from .models import Photo
 import os
 import pytz
 import re
@@ -29,11 +44,13 @@ missinglist = []
 created = {}
 
 @csrf_exempt
+@login_required(login_url='/users/login/')
 def home(request):
     image_list = File.objects.all()
     context = {"image_list":image_list}
     return render(request, 'home.html', context)
 
+@login_required(login_url='/users/login/')
 def recent(request):
     image_list = File.objects.all()
     today_list = []
@@ -67,13 +84,12 @@ def recent(request):
     context = {"image_list":image_list, 'week_list':week_list, 'month_list':month_list, 'year_list':year_list}
 
     return render(request, 'recent.html', context)
-
-
 @csrf_exempt
+@login_required(login_url='/users/login/')
 def mydrive(request):
     user = request.user
     pro = Profile.objects.get(user=user)
-    image_list = File.objects.all()
+    image_list = File.objects.filter(owner=pro)
     folder_list = None
     if pro.gid != 0:
         g = Folder.objects.get(id=pro.gid)
@@ -84,7 +100,7 @@ def mydrive(request):
     for image in image_list:
         if 'jpeg' or 'png' or 'jpg' in image.file_type:
             x = x + 1
-            if x == 8:
+            if x == 11:
                 return render(request, 'my-drive.html', context)
             qa_list.append(image)
             context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
@@ -93,7 +109,47 @@ def mydrive(request):
     context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
     return render(request, 'my-drive.html', context)
 
+
+
 @csrf_exempt
+@login_required(login_url='/users/login/')
+def mydrivetrash(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    image_list = File.objects.filter(owner=pro, trash=True)
+    folder_list = None
+    if pro.gid != 0:
+        g = Folder.objects.get(id=pro.gid)
+        folder_list = Folder.objects.filter(parent=g, trash=True)
+    qa_list = []
+    x = 0
+
+    if(image_list):
+        for image in image_list:
+            if 'jpeg' or 'png' or 'jpg' in image.file_type:
+                x = x + 1
+                if x == 11:
+                    return render(request, 'my-drive-trash.html', context)
+                qa_list.append(image)
+                if(len(image_list) == 0):
+                    context = {'folder_list':folder_list}
+                if(len(folder_list) == 0):
+                    context = {'image_list':image_list}
+                if(len(folder_list) != 0 and len(image_list) != 0):
+                    context = {"image_list":image_list, 'folder_list':folder_list}
+
+    if(len(image_list) == 0):
+        context = {'folder_list':folder_list}
+    if(len(folder_list) == 0):
+        context = {'image_list':image_list}
+    if(len(folder_list) != 0 and len(image_list) != 0):
+        context = {"image_list":image_list, 'folder_list':folder_list}
+
+
+    return render(request, 'my-drive-trash.html', context)
+
+@csrf_exempt
+@login_required(login_url='/users/login/')
 def upload(request):
 
     if request.method == 'POST':
@@ -117,6 +173,7 @@ def upload(request):
 
 dirs = []
 @csrf_exempt
+@login_required(login_url='/users/login/')
 def getDirs(request):
     if request.method == 'POST':
         if 'paths' in request.POST:
@@ -131,8 +188,8 @@ def getDirs(request):
     return HttpResponse('FAIL!!!!!')
 
 def handle_uploaded_file(f, filename, user, mypath):
-    path = '/home/mason/ether/static/accounts/'+ str(user.username) + '/' + 'genesis/' + mypath + filename
-    db_path = '/accounts/' + str(user.username) + '/' + 'genesis/' + mypath + filename
+    path = '/home/mason/ether/static/accounts/'+ str(user.email) + '/' + 'genesis/' + mypath + filename
+    db_path = '/accounts/' + str(user.email) + '/' + 'genesis/' + mypath + filename
     with open(path, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -152,6 +209,7 @@ def handle_uploaded_file(f, filename, user, mypath):
 
 
 @csrf_exempt
+@login_required(login_url='/users/login/')
 def foo(request):
     mylist = []
     user = request.user
@@ -236,12 +294,14 @@ def foo(request):
     return HttpResponse('in fooo')
 
 @csrf_exempt
+@login_required(login_url='/users/login/')
 def handle_upload(request):
     request.upload_handlers.insert(0, foo(request))
 
     files = request.FILES.getlist('file_field')
     return HttpResponse('success') # if everything is OK
 
+@login_required(login_url='/users/login/')
 def trash(request, slug, pk):
     f = File.objects.get(pk=pk)
     if(f.trash == True):
@@ -258,14 +318,39 @@ def trash(request, slug, pk):
     context = {"image_list":image_list}
     return render(request, 'home.html', context)
 
+@login_required(login_url='/users/login/')
+def trashfolder(request, slug, pk):
+    f = Folder.objects.get(pk=pk)
+    if(f.trash == True):
+        os.remove('/home/mason/ether/static'+f.path)
+        f.delete()
+        print("delete")
+        print(f.path)
+        image_list = Folder.objects.all()
+        context = {"image_list":image_list}
+        return render(request, 'home.html', context)
+    f.trash = True
+    f.save()
+    image_list = File.objects.all()
+    context = {"image_list":image_list}
+    return render(request, 'home.html', context)
+
 def allTrash(request):
     image_list  = File.objects.all().filter(trash=True)
-    context = {"image_list":image_list}
+    folder_list  = Folder.objects.all()
+    context = {"image_list":image_list, 'folder_list:':folder_list}
     return render(request, 'trash.html', context)
 
 def allStarred(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    image_list = File.objects.filter(owner=pro)
+    folder_list = None
+    if pro.gid != 0:
+        g = Folder.objects.get(id=pro.gid)
+        folder_list = Folder.objects.filter(parent=g,starred=True)
     image_list  = File.objects.all().filter(starred=True)
-    context = {"image_list":image_list}
+    context = {"image_list":image_list, "folder_list":folder_list}
     return render(request, 'starred.html', context)
 
 def star(request, slug, pk):
@@ -273,6 +358,14 @@ def star(request, slug, pk):
     f.starred = True
     f.save()
     image_list = File.objects.all()
+    context = {"image_list":image_list}
+    return render(request, 'home.html', context)
+
+def starfolder(request, slug, pk):
+    f = Folder.objects.get(pk=pk)
+    f.starred = True
+    f.save()
+    image_list = Folder.objects.all()
     context = {"image_list":image_list}
     return render(request, 'home.html', context)
 
@@ -387,7 +480,7 @@ def my_view_that_updates_pieFact(request):
             temp = pieFact
             p = temp.split('/')[-1]
             temp = temp.replace(p,'')
-            os.chdir('/home/mason/ether/static/accounts/admon/genesis/')
+            os.chdir('/home/mason/ether/static/accounts/'+str(pro.user)+'/genesis/')
             if not os.path.exists(temp):
                 os.makedirs(temp)
 
@@ -416,3 +509,57 @@ def download(request, slug, pk):
     response['Content-Disposition'] = 'attachment; filename=' + f.name
     return response
 
+
+
+
+class BasicUploadView(View):
+    def get(self, request):
+        photos_list = Photo.objects.all()
+        return render(self.request, 'photos/basic_upload/index.html', {'photos': photos_list})
+
+    def post(self, request):
+        form = PhotoForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+
+class ProgressBarUploadView(View):
+    def get(self, request):
+        photos_list = Photo.objects.all()
+        return render(self.request, 'uploads/progress_bar_upload/index.html', {'photos': photos_list})
+
+    def post(self, request):
+        time.sleep(1)  # You don't need this line. This is just to delay the process so you can see the progress bar testing locally.
+        form = PhotoForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+
+class DragAndDropUploadView(View):
+    def get(self, request):
+        photos_list = Photo.objects.all()
+        return render(self.request, 'photos/drag_and_drop_upload/index.html', {'photos': photos_list})
+
+    def post(self, request):
+        form = PhotoForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+
+def clear_database(request):
+    for photo in Photo.objects.all():
+        photo.file.delete()
+        photo.delete()
+    return redirect(request.POST.get('next'))

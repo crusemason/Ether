@@ -38,10 +38,24 @@
 }
 
 .myhr{
-    height:.5px;
-    background-color:rgba(0,0,0,.085);
-    margin-top:.25rem;
-    margin-bottom:.5rem;
+    border: 0;
+  clear:both;
+  display:block;
+  width: 100%;
+  background-color:rgba(0,0,0,.2);
+  margin-top:.4rem;
+  margin-bottom:.4rem;
+  height: 1px;
+}
+.myhr1{
+    border: 0;
+  clear:both;
+  display:block;
+  width: 100%;
+  background-color:rgba(0,0,0,.2);
+  margin-top:.4rem;
+  margin-bottom:.4rem;
+  height: 1px;
 }
 
 #folder-upload{
@@ -108,4 +122,28 @@
 }
 #newfolder{
     margin-bottom:1rem;
+}
+#fileuploadwrapper{
+    padding:0 0;
+    position: absolute;
+    margin:0 0;
+    opacity: 0;
+    height: 100%
+    width:100%;
+}
+#fileupload-wrapper{
+   
+}
+.new-popup-item{
+    pointer-events: none;
+}
+#fileuploadwrapper{
+    pointer-events:auto;
+}
+#newfolder{
+    pointer-events:auto;
+}
+#fileuploadicon{
+    margin-left:1rem;
+    margin-right:.4rem;
 }

@@ -4,6 +4,8 @@
 {% block link %}
 <link rel="stylesheet" href="{% static "css/my-drive.css" %}">
 <link rel="stylesheet" href="{% static "css/folders.css" %}">
+<link rel="stylesheet" href="{% static "css/flexboxgrid.css" %}">
+
 {% endblock %}
 
 
@@ -11,63 +13,49 @@
 {% endblock %}
 {% block content1 %}
 <div>
-<div class="folders-title">Folders</div>
+{% if folder_list %}
+<div class="folders-title">Folders
 <div class="folders-wrapper">
-            <div class="foldercontainer">
+            {% for folder in folder_list %}
+            <a  href="{% url  'subfolder' folder.id %}">
+            <div id="foldercontent-{{ folder.id }}" class="foldercontainer">
                 <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
+                <span>{{folder.name}}</span>
             </div>
-            <div class="foldercontainer">
-                <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
-            </div>
-            <div class="foldercontainer">
-                <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
-            </div>
-            <div class="foldercontainer">
-                <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
-            </div>
-            <div class="foldercontainer">
-                <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
-            </div>
-            <div class="foldercontainer">
-                <i id="folder" class="fas fa-folder fa-lg icon"></i>
-                <span>Folder-name</span>
-            </div>
+            </a>
+            {% endfor %}
 </div>
 
+{% endif %}
+
 <div>
-    <div class="files-title">Files</div>
+    <div>
+      <div class="files-title">Files</div>
     {% if image_list %}
-    <div class="filesflex">
-        {% for image in image_list %}
-        {% if image.trash == True %}
-        <a href="#" class="file">
-        <div id="f{{image.id}}" class="filecontainer-wrapper" onClick='t(this.id)'>
-            <div id="fcontent-{{image.id}}" class="content{{image.id}} file-content" onclick='t()'>
-            {% if 'jpeg' in image.file_type %}
-            <img id="img" src="{% static image.path  %}"> 
-            {% endif %}
-            {% if image.images %}
-            {% endif %}
-        </div>
-        
-        <div id="file-infof{{image.id}}" class="file-info" onclick='t()'>
-            <div class="icon-circle icon"><i class="far fa-file-image fa-lg icon"></i></div>
-            <div class="filecontainer-filename" onclick='t()'>
-                {{ image.name }}
+<link rel="stylesheet" href="flexboxgrid.css">
+<div class='flexbox'>
+{% for image in image_list %}
+<div id="f{{image.id}}" class="list-item f-{{image.id}}" onClick='t(this.id)'>
+<a href="#" class="file">
+    <div id='fcontent-{{image.id}}' class="list-content file-content content{{image.id}} file-content" onclick='t()'>
+      <img id="img" src="{% static image.path  %}">
+      <div id="file-infof{{image.id}}"class="list-footer"onclick='t()'>
+          <div id="file-infof{{image.id}}" class='list-icon-wrapper'> 
+            <div class='file-icon-circle'>
+            <i id='file-icon' class="far fa-hdd file-icon"></i>
             </div>
         </div>
-        </div>
-        </a>
-            {% endif %}
-        {% endfor %}
 
-        {% endif %}
+        <div class='list-footer-name'>
+            <span>{{ image.name }}</span>
+        </div>
     </div>
+    </div>
+</a>
+  </div>
+  {% endfor %}
+{% endif %}
+</div>
 </div>
 </div>
 {% endblock %}

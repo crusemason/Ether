@@ -31,8 +31,14 @@ class Folder(models.Model):
     name = models.CharField(max_length=75, blank=True)
     children = models.ManyToManyField('self', related_name='folders')
     path = models.CharField(max_length=500, blank=True)
+    starred = models.BooleanField(default=False)
     #Genesis ID ROOT FOLDER ID
+    trash = models.BooleanField(default=False)
     gid = models.IntegerField(default=0)
-
+    
+class Photo(models.Model):
+    title = models.CharField(max_length=255, blank=True)
+    file = models.FileField(upload_to='photos/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
 

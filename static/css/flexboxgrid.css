@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: #f5f5f5;
+  margin: 0 auto; 
+  line-height: 1.3;
+}
+ul, li {
+  width:100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.flexbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:start;
+  align-content:start;
+}
+
+.flexbox > .list-item{
+  /*
+    1/3  - 3 columns per row
+    10px - spacing between columns 
+  */
+  box-sizing: border-box;
+  margin:.7rem .5rem;
+  height:220px;
+  max-width:280px;
+  flex:1 1 0;
+}
+.list-item:last-child{
+    margin-right:1000px;
+}
+
+#img {
+  border:1px solid rgba(0,0,0,.3);
+  border-bottom:none;
+  border-top-left-radius:5px;
+  height:180px;
+  width:200px;
+  border-top-right-radius:5px;
+}
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.4em;
+}
+
+/*Flex items*/
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:start;
+}
+@media all and (max-width: 1600px) {
+  .list-item {
+  }
+.flexbox > .list-item{
+  /*
+    1/3  - 3 columns per row
+    10px - spacing between columns 
+  */
+  margin:.7rem .5rem;
+  height:210px;
+  flex:1 1 0;
+}
+}
+.list-content {
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height:230px;
+  min-width:205px;
+  max-width:305px;
+}
+.list-content p {
+    flex: 1 0 auto;
+}
+
+.list-footer{
+    display:flex;
+ 
+  border:1px solid rgba(0,0,0,.3);
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  border-top:none;
+    align-items:center;
+    min-height:45px;
+    overflow:hidden;
+}
+.list-footer-name{
+    overflow:hidden;
+    display:flex;
+}
+.list-footer-name span{
+    display:flex;
+    overflow:hidden;
+ white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family:'Roboto','arial';
+  font-size:.9em;
+}
+
+.list-icon-wrapper{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+#file-icon{
+}
+.file-icon-circle{
+    height:32.5px;
+    width:32.5px;
+    display:flex;
+    background-color:white;
+    align-items:center;
+    justify-content:center;
+    margin-left:1.1rem;
+    border-radius:50%;
+    margin-right:.6rem;
+
+}

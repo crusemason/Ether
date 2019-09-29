@@ -5,7 +5,8 @@ function newFolder(){
 
 }
 function t(ele){
-    console.log('.file-info'+ele);
+    console.log('.list-footer'+ele);
+    $('#file-icon').css('color','black');
     $('.sub-wrapper').css('display', 'block');
     $('.vert').css('display', 'block');
     if (ele != null){
@@ -16,11 +17,12 @@ function t(ele){
     }
     document.getElementById('subhtrash').href = '/trash/' + s;
 
-    $('.file-info').css('background', '#ffffff');
-    $('.file-info').css('color', 'black');
+    $('.list-footer').css('background', '#ffffff');
+    $('.list-footer').css('color', 'black');
     $('#file-info'+ele).css('background', '#e8f0fe');
     $('#file-info'+ele).css('color', '#1967d2');
 
+    $('.file-icon').css('color','black');
 
 }
 function newFolderClose(){
@@ -68,8 +70,9 @@ document.addEventListener("click", function(event){
         $('#user-info-p').css('display', 'none');
         $('.sub-wrapper').css('display', 'none');
         $('.vert').css('display', 'none');
-        $('.file-info').css('background', '#ffffff');
-        $('.file-info').css('color', 'black');
+        $('.list-footer').css('background', '#ffffff');
+        $('.list-footer').css('color', 'black');
+        $('#file-icon').css('color', 'black');
 
     }
 

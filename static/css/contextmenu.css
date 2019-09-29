@@ -46,6 +46,19 @@
     margin-right:2rem;
 }
 
-#x{
-    margi
+.folderhr{
+    border: 0;
+  clear:both;
+  display:block;
+  width: 100%;
+  background-color:rgba(0,0,0,.2);
+  margin-top:.4rem;
+  margin-bottom:.4rem;
+  height: 1px;
+}
+.fileupload-wrapper{
+  position: absolute;
+}
+#fileupload{
+  margin-right:1rem;
 }
