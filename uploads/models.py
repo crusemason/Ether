@@ -14,6 +14,8 @@ class File(models.Model):
     name = models.CharField(max_length=75, blank=True)
     file_type = models.CharField(max_length=75, blank=True)
     files = models.FileField(upload_to=content_file_name, blank=True)
+    size = models.CharField(max_length=1000,blank=True)
+    file = models.FileField(upload_to='uploads/', default='',blank=True)
     images = models.ImageField(blank=True, upload_to='album')
     starred = models.BooleanField(default=False)
     trash = models.BooleanField(default=False)
@@ -35,7 +37,7 @@ class Folder(models.Model):
     #Genesis ID ROOT FOLDER ID
     trash = models.BooleanField(default=False)
     gid = models.IntegerField(default=0)
-    
+
 class Photo(models.Model):
     title = models.CharField(max_length=255, blank=True)
     file = models.FileField(upload_to='photos/')

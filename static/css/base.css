@@ -8,7 +8,7 @@ a{
   z-index:0;
   display: grid;
   grid-template-rows: 65px 55px calc(100vh - 120px);  /* height limitation on second row */
-  grid-template-columns: 320px auto;
+  grid-template-columns: 256px auto;
   grid-template-areas: "nav header" 
                        "nav subheader"
                        "nav content";
@@ -16,19 +16,24 @@ a{
 
 .nav {
   grid-area: nav;
+    position:fixed;
+    background-color:#F8F8F8;
+    z-index:9;
+    width:256px;
 }
 
 .nav-logo-wrapper{
   width:100%;
   height:65px;
   border-bottom:.8px solid rgba(0,0,0,.3);
+    background-color:#F8F8F8;
+    z-index:9;
 }
 
 .new-btn-wrapper{
     height:72px;
     display:flex;
     align-items:center;
-    justify-content:start;
 }
 .nav-logo-wrapper{
     display:flex;
@@ -56,7 +61,6 @@ a{
     color:black;
     display:flex;
     align-items:center;
-    justify-content:center;
     font-size:1.2em;
     font-family:arial;
     font-weight:500;
@@ -142,15 +146,22 @@ background-color:#e8f0fe;
 
 .header {
   border-bottom:.8px solid rgba(0,0,0,.3);
+  background-color:#F8F8F8;
   grid-area: header;
+  position:sticky;
+  top:0;
   display:flex;
   align-items:center;
+    z-index:9;
 }
 
 .subheader {
     grid-area: subheader;
     border-bottom:.8px solid rgba(0,0,0,.3);
     display:flex;
+    position:sticky;
+    background-color:#F8F8F8;
+    z-index:5;
     aligin-items:center;
 }
 
@@ -160,7 +171,6 @@ background-color:#e8f0fe;
   position:relative;
   display:flex;
   flex-wrap:wrap;
-  overflow-x:hidden;
 }
 
 article {
@@ -174,7 +184,7 @@ article {
     width:70%;
     min-width:400px;
     border-radius:10px;
-    background-color:rgba(0,0,0,.1);
+    background-color:#CDCDCD;
     padding-right:10px;
     border:none;
     margin-right:3rem;
@@ -392,4 +402,33 @@ background-color:black;
 }
 #filepicker{
     opacity:0;
+}
+.user-logo-container{
+    height:65px;
+    width:65px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#newplus{
+    margin-left:1.2rem;
+    margin-right:.8rem;
+}
+.new-btn-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.new-btn-wrap span{
+    font-family:'Roboto';
+    font-size:.9em; 
+    color:rgba(0,0,0,.9);
+}
+#new-btn{
+}
+.headerandsub{
+    position:sticky;
+    top:0;
 }

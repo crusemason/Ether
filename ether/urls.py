@@ -38,10 +38,12 @@ urlpatterns = [
     url(r'^trash/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.trash, name='trash'),
     url(r'^trashfolder/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.trashfolder, name='trashfolder'),
     url(r'^download/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.download, name='download'),
+    url(r'^downloadfolder/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.downloadfolder, name='downloadfolder'),
     url(r'^star/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.star, name='star'),
     url(r'^starfolder/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.starfolder, name='starfolder'),
     url(r'^removestar/(?P<slug>[-\w]+)-(?P<pk>\d+)/$', upload_views.removestar, name='removestar'),
     url(r'^ajax/validate_username/$', upload_views.validate_upload,                name='validate_upload'),
+    url(r'^ajax/searchajax/$', upload_views.searchajax,                name='searchajax'),
     path('my_view_that_updates_pieFact/', upload_views.my_view_that_updates_pieFact),
 
 

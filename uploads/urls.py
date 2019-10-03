@@ -6,7 +6,7 @@ from django.conf.urls import url
 from . import views
 app_name = 'uploads'
 urlpatterns = [
-        path('', views.home),
+        path('', views.mydrive),
         path('upload/', views.upload),
         url(r'^clear/$', views.clear_database, name='clear_database'),
     url(r'^basic-upload/$', views.BasicUploadView.as_view(), name='basic_upload'),
@@ -17,10 +17,12 @@ urlpatterns = [
         path('getDirs/', views.getDirs, name='getDirs'),
         path('handle_upload/', views.handle_upload, name='handle_upload'),
         path('mydrive/', views.mydrive, name='mydrive'),
+        path('mydrivetable/', views.mydrivetable, name='mydrivetable'),
         path('starred/', views.allStarred, name='allStarred'),
         path('recent/', views.recent, name='recent'),
         url(r'^ajax/validate_upload/$', views.validate_upload, name='validate_username'),
-        
+
+
 
 ]
 

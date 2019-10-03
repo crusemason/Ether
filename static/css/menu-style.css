@@ -140,6 +140,9 @@
 #fileuploadwrapper{
     pointer-events:auto;
 }
+#formitem{
+    pointer-events:auto;
+}
 #newfolder{
     pointer-events:auto;
 }

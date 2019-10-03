@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django import template
+import shutil
 from django.db import transaction
+from django.shortcuts import render_to_response
 from django import template
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +22,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views import View
 import time
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from django.core import serializers
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -42,6 +48,13 @@ filedic = {}
 missinglist = []
 #created = folder dict name is key value is folder id
 created = {}
+
+
+register = template.Library()
+
+@register.filter()
+def range(min=5):
+    return range(min)
 
 @csrf_exempt
 @login_required(login_url='/users/login/')
@@ -100,7 +113,7 @@ def mydrive(request):
     for image in image_list:
         if 'jpeg' or 'png' or 'jpg' in image.file_type:
             x = x + 1
-            if x == 11:
+            if x == 20:
                 return render(request, 'my-drive.html', context)
             qa_list.append(image)
             context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
@@ -108,6 +121,33 @@ def mydrive(request):
 
     context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
     return render(request, 'my-drive.html', context)
+
+@csrf_exempt
+@login_required(login_url='/users/login/')
+def mydrivetable(request):
+    user = request.user
+    me = user.email
+    pro = Profile.objects.get(user=user)
+    image_list = File.objects.filter(owner=pro)
+    folder_list = None
+    if pro.gid != 0:
+        g = Folder.objects.get(id=pro.gid)
+        folder_list = Folder.objects.filter(parent=g)
+    qa_list = []
+    x = 0
+
+    for image in image_list:
+        if 'jpeg' or 'png' or 'jpg' in image.file_type:
+            x = x + 1
+            if x == 20:
+                return render(request, 'my-drive-table.html', context)
+            qa_list.append(image)
+            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me}
+
+
+    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me}
+    return render(request, 'my-drive-table.html', context)
+
 
 
 
@@ -196,6 +236,10 @@ def handle_uploaded_file(f, filename, user, mypath):
     p = Profile.objects.get(user=user)
     fname, file_ext = os.path.splitext(path)
     fi = File.objects.create(owner=p, name=str(filename), path=db_path, file_type=file_ext)
+    filesize= os.path.getsize('/home/mason/ether/static'+fi.path)
+    print('fsize'+str(filesize))
+    fi.size = str(filesize)
+    fi.save()
     count = mypath.count('/')
     if count == 1:
         print('my path-----'+mypath)
@@ -509,6 +553,17 @@ def download(request, slug, pk):
     response['Content-Disposition'] = 'attachment; filename=' + f.name
     return response
 
+def downloadfolder(request, slug, pk):
+    f = Folder.objects.get(id=pk)
+    print('fromdownloaditem'+f.path)
+    shutil.make_archive(f.path, 'zip', f.path)
+    f0 = open(f.path+'.zip', 'rb')
+    myfile = DjangoFile(f0)
+    response = HttpResponse(myfile)
+    response['Content-Disposition'] = 'attachment; filename=' + f.name+'.zip'
+    return response
+
+
 
 
 
@@ -529,15 +584,19 @@ class BasicUploadView(View):
 
 class ProgressBarUploadView(View):
     def get(self, request):
-        photos_list = Photo.objects.all()
+        photos_list = File.objects.all()
         return render(self.request, 'uploads/progress_bar_upload/index.html', {'photos': photos_list})
 
     def post(self, request):
         time.sleep(1)  # You don't need this line. This is just to delay the process so you can see the progress bar testing locally.
         form = PhotoForm(self.request.POST, self.request.FILES)
+        user = request.user
+        pro = Profile.objects.get(user=user)
+        form.instance.owner = pro
         if form.is_valid():
-            photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            File = form.save()
+            print(File)
+            data = {'is_valid': True, 'name': File.file.name, 'url': File.file.url}
         else:
             data = {'is_valid': False}
         return JsonResponse(data)
@@ -552,6 +611,7 @@ class DragAndDropUploadView(View):
         form = PhotoForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             photo = form.save()
+            photo.owner
             data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
         else:
             data = {'is_valid': False}
@@ -563,3 +623,20 @@ def clear_database(request):
         photo.file.delete()
         photo.delete()
     return redirect(request.POST.get('next'))
+
+
+@csrf_exempt
+def searchajax(request):
+    searchq = request.GET.get('searchq', None)
+    if request.method == "POST":
+        searchq = request.POST['searchq']
+    print('in search')
+    print(searchq)
+    f_json = False
+    if(File.objects.filter(name__contains=searchq).exists()):
+            f = File.objects.filter(name__contains=searchq)
+
+    data = {
+        'is_taken': f_json
+    }
+    return render_to_response('ajax_search.html', {'files':f})

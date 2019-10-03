@@ -25,6 +25,17 @@ function t(ele){
     $('.file-icon').css('color','black');
 
 }
+
+function q(ele){
+    console.log('in q');
+    $('.qafooter').css('background', '#ffffff');
+    $('.qafooter').css('color', 'black');
+    $('#qfooter'+ele).css('background', '#e8f0fe');
+    $('#qfooter'+ele).css('color', '#1967d2');
+    $('.qaname').css('color', 'black');
+    $('#qaname'+ele).css('color', '#1967d2');
+    $('.qaicon').css('color','black');
+}
 function newFolderClose(){
     $('#newfolder-popup').css('display', 'none');
     $(".cover").fadeOut(500);
@@ -48,6 +59,8 @@ document.addEventListener("click", function(event){
         $('#new-popup').css('display', 'block');
 
     }
+    else if (event.target.closest('.qafilea')){
+            }
     else if (event.target.closest('.filecontainer-wrapper')){
             }
     else if (event.target.closest('.user-info')){
@@ -73,6 +86,9 @@ document.addEventListener("click", function(event){
         $('.list-footer').css('background', '#ffffff');
         $('.list-footer').css('color', 'black');
         $('#file-icon').css('color', 'black');
+        $('.qafooter').css('background', '#ffffff');
+        $('.qaname').css('color', 'black');
+        $('.qafooter').css('color', 'black');
 
     }
 

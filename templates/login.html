@@ -44,6 +44,7 @@
           if (data.is_taken) {
             alert("A user with this username already exists.");
             location.href='/users/loginpw/'
+            $(body).css('background','blue');
           }
           else{
             alert("User does not exists. Please create an account");

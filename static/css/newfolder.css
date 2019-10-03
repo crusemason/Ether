@@ -12,7 +12,7 @@ input[type=text], textarea {
  
 }
  
-input[type=text]:focus, textarea:focus {
+.blueglow{
   box-shadow: 0 0 5px #4285f4;
   
   border: 1px solid #4285f4;
