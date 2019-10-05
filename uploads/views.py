@@ -59,8 +59,13 @@ def range(min=5):
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def home(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    storage = pro.storage
+    storage = int(storage/1500000)
+    print(storage)
     image_list = File.objects.all()
-    context = {"image_list":image_list}
+    context = {"image_list":image_list, 'storage':storage}
     return render(request, 'home.html', context)
 
 @login_required(login_url='/users/login/')
@@ -238,6 +243,8 @@ def handle_uploaded_file(f, filename, user, mypath):
     fi = File.objects.create(owner=p, name=str(filename), path=db_path, file_type=file_ext)
     filesize= os.path.getsize('/home/mason/ether/static'+fi.path)
     print('fsize'+str(filesize))
+    p.storage = p.storage + filesize
+    p.save()
     fi.size = str(filesize)
     fi.save()
     count = mypath.count('/')
@@ -296,43 +303,44 @@ def foo(request):
 
     for d in dirs:
         print(d)
-        print('fdict-----------'+str(fdict[d]))
-        mylist1 = []
-        for fd in fdict[d]:
-            print('fd='+str(fd))
-            mylist1.append(fd)
-        index = dirs.index(d)
-        print('index='+str(index))
-        if once == 0:
-            once = 1
-            f = Folder.objects.create(owner=pro, parent=gf, name=d, path=gf.path+d)
-            for my in mylist1:
-                fi = File.objects.get(id=my)
-                f.folderfiles.add(fi)
-                f.save()
-            print('fname----------',f.name)
-            created.update({f.name:f.id})
-            mylist.append(d)
-            print(mylist[0])
+        if(d in fdict):
+            print('fdict-----------'+str(fdict[d]))
+            mylist1 = []
+            for fd in fdict[d]:
+                print('fd='+str(fd))
+                mylist1.append(fd)
+            index = dirs.index(d)
+            print('index='+str(index))
+            if once == 0:
+                once = 1
+                f = Folder.objects.create(owner=pro, parent=gf, name=d, path=gf.path+d)
+                for my in mylist1:
+                    fi = File.objects.get(id=my)
+                    f.folderfiles.add(fi)
+                    f.save()
+                print('fname----------',f.name)
+                created.update({f.name:f.id})
+                mylist.append(d)
+                print(mylist[0])
 
-        if d in created:
-            pass
-        else:
-            print('fname----------',f.name)
-            print('mylist='+str(dirs[index-1]))
-            pid = created[dirs[index-1]]
-            print('parent id='+str(pid))
-            pf = Folder.objects.get(id=pid)
-            f = Folder.objects.create(owner=pro, parent=pf, name=d, path=pf.path+'/'+d)
-            print(fdict)
-            if  d in fdict:
-                xx = fdict[d]
-                print('xx-------'+str(xx))
-                for x in xx:
-                    print('x='+str(x))
-                    filef = File.objects.get(id=x)
-                    f.folderfiles.add(filef)
-            created.update({f.name:f.id})
+            if d in created:
+                pass
+            else:
+                print('fname----------',f.name)
+                print('mylist='+str(dirs[index-1]))
+                pid = created[dirs[index-1]]
+                print('parent id='+str(pid))
+                pf = Folder.objects.get(id=pid)
+                f = Folder.objects.create(owner=pro, parent=pf, name=d, path=pf.path+'/'+d)
+                print(fdict)
+                if  d in fdict:
+                    xx = fdict[d]
+                    print('xx-------'+str(xx))
+                    for x in xx:
+                        print('x='+str(x))
+                        filef = File.objects.get(id=x)
+                        f.folderfiles.add(filef)
+                created.update({f.name:f.id})
     print(created)
 
     return HttpResponse('in fooo')
@@ -464,7 +472,7 @@ def subfolder(request, pk):
     f = Folder.objects.get(id=pk)
     folder_list = Folder.objects.filter(parent=f)
     image_list = f.folderfiles.all()
-    context = {'folder_list':folder_list, 'image_list':image_list}
+    context = {'folder_list':folder_list, 'image_list':image_list, 'parent':f}
     return render(request, 'subfolder.html', context)
 
 @csrf_exempt
