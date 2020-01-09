@@ -24,13 +24,39 @@
     <div class='lnbtnwrapper'>
     <a href='/users/createaccount' class='lnca'>Create account</a>
     <div class='lnbtnw'>
-    <button class='lnbtn'>Next</button>
+    <button id='usernamecheck' class='lnbtn'>Next</button>
     </div>
     </div>
     </div>
 </div>
 <script src='{% static 'js/login.js' %}'></script>
  <script>
+    document.getElementById('usernamecheck').onclick = function(){
+    var username = $("#id_email").val();
+
+      $.ajax({
+        url: '/users/ajax/validate_username/',
+        data: {
+          'username': username
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this username already exists.");
+            location.href='/users/loginpw/'
+            $(body).css('background','blue');
+          }
+          else{
+            alert("User does not exists. Please create an account");
+          }
+        }
+      });
+
+
+
+
+
+    };
     $("#id_email").change(function () {
       var username = $(this).val();
 
@@ -53,4 +79,31 @@
       });
 
     });
+    $("#id_email").on('keyup', function(e) {
+      if (e.keyCode === 13)
+      {
+      var username = $(this).val();
+
+      $.ajax({
+        url: '/users/ajax/validate_username/',
+        data: {
+          'username': username
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this username already exists.");
+            location.href='/users/loginpw/'
+            $(body).css('background','blue');
+          }
+          else{
+            alert("User does not exists. Please create an account");
+          }
+        }
+      });
+     }
+
+    });
+
+	
   </script>

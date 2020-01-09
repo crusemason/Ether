@@ -8,6 +8,7 @@ from .models import CustomUser
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 User = get_user_model()
 
 class SignUpView(CreateView):
@@ -19,7 +20,6 @@ class SignUpView(CreateView):
 
 
 def indexView(request):
-    print('mom is did it')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -40,17 +40,21 @@ def login(request):
     return render(request, 'login.html')
 
 
+#adding Q object to allow complex 'OR' lookups
 
 def validate_username(request):
     username = request.GET.get('username', None)
-    if(User.objects.filter(email__contains=username).exists()
-            ):
+
+    #result checks if the username has an account
+    result = User.objects.filter(email__contains=username).exists() | User.objects.filter(email__exact=username).exists()
+
+    if(result):
             print('yessssiir')
             user = User.objects.get(email__contains=username)
             request.session['userid'] = user.id
     print(username)
     data = {
-        'is_taken': User.objects.filter(email__contains=username).exists()
+        'is_taken': result
     }
     return JsonResponse(data)
 from django.contrib.auth import authenticate, login, logout

@@ -56,13 +56,17 @@ register = template.Library()
 def range(min=5):
     return range(min)
 
+def getstorage(pro):
+    storage = pro.storage
+    storage = int(storage/1500000)
+    return storage
+
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def home(request):
     user = request.user
     pro = Profile.objects.get(user=user)
-    storage = pro.storage
-    storage = int(storage/1500000)
+    storage = getstorage(pro)
     print(storage)
     image_list = File.objects.all()
     context = {"image_list":image_list, 'storage':storage}
@@ -70,6 +74,9 @@ def home(request):
 
 @login_required(login_url='/users/login/')
 def recent(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    storage = getstorage(pro)
     image_list = File.objects.all()
     today_list = []
     week_list = []
@@ -99,7 +106,7 @@ def recent(request):
             year_list.append(image)
 
 
-    context = {"image_list":image_list, 'week_list':week_list, 'month_list':month_list, 'year_list':year_list}
+    context = {"image_list":image_list, 'week_list':week_list, 'month_list':month_list, 'year_list':year_list, 'storage':storage}
 
     return render(request, 'recent.html', context)
 @csrf_exempt
@@ -107,6 +114,7 @@ def recent(request):
 def mydrive(request):
     user = request.user
     pro = Profile.objects.get(user=user)
+    storage = getstorage(pro)
     image_list = File.objects.filter(owner=pro)
     folder_list = None
     if pro.gid != 0:
@@ -121,18 +129,19 @@ def mydrive(request):
             if x == 20:
                 return render(request, 'my-drive.html', context)
             qa_list.append(image)
-            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
+            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'storage':storage}
 
 
-    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list}
+    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'storage':storage}
     return render(request, 'my-drive.html', context)
 
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def mydrivetable(request):
     user = request.user
-    me = user.email
     pro = Profile.objects.get(user=user)
+    storage = getstorage(pro)
+    me = user.email
     image_list = File.objects.filter(owner=pro)
     folder_list = None
     if pro.gid != 0:
@@ -147,10 +156,10 @@ def mydrivetable(request):
             if x == 20:
                 return render(request, 'my-drive-table.html', context)
             qa_list.append(image)
-            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me}
+            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me, 'storage':storage}
 
 
-    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me}
+    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me, 'storage':storage}
     return render(request, 'my-drive-table.html', context)
 
 
@@ -161,6 +170,7 @@ def mydrivetable(request):
 def mydrivetrash(request):
     user = request.user
     pro = Profile.objects.get(user=user)
+    storage = getstorage(pro)
     image_list = File.objects.filter(owner=pro, trash=True)
     folder_list = None
     if pro.gid != 0:
@@ -181,14 +191,14 @@ def mydrivetrash(request):
                 if(len(folder_list) == 0):
                     context = {'image_list':image_list}
                 if(len(folder_list) != 0 and len(image_list) != 0):
-                    context = {"image_list":image_list, 'folder_list':folder_list}
+                    context = {"image_list":image_list, 'folder_list':folder_list, 'storage':storage}
 
     if(len(image_list) == 0):
-        context = {'folder_list':folder_list}
+        context = {'folder_list':folder_list, 'storage':storage}
     if(len(folder_list) == 0):
-        context = {'image_list':image_list}
+        context = {'image_list':image_list, 'storage':storage}
     if(len(folder_list) != 0 and len(image_list) != 0):
-        context = {"image_list":image_list, 'folder_list':folder_list}
+        context = {"image_list":image_list, 'folder_list':folder_list, 'storage':storage}
 
 
     return render(request, 'my-drive-trash.html', context)
@@ -601,8 +611,12 @@ class ProgressBarUploadView(View):
         user = request.user
         pro = Profile.objects.get(user=user)
         form.instance.owner = pro
+
         if form.is_valid():
             File = form.save()
+            name = File.file.name
+            File.name = name
+            File.save()
             print(File)
             data = {'is_valid': True, 'name': File.file.name, 'url': File.file.url}
         else:

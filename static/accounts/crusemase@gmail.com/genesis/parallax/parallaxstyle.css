@@ -1,0 +1,96 @@
+.navbar{
+background-color:grey;
+padding-bottom:10px;
+position:sticky;
+top:0;
+z-index:10;
+}
+html {
+    overflow: hidden;
+}
+body {
+    margin: 0;
+    font-size: 26px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #ffffff;
+    height: 100vh;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+.parallax-wrapper {
+    width: 100vw;
+    height:95vh;
+    padding-top:20vh;
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+}
+.parallax-wrapper::before {
+    content:"";
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+    background-image: url("images/5.jpg");
+    background-repeat:no-repeat;
+    background-size:100%;
+    position: absolute;
+    z-index: -1;
+    transform:translateZ(-1px) scale(2);
+}
+.trans2{
+  margin: 0 auto;
+    width: 30%;
+    transform: translate(110px,300px);
+    background-color:rgba(0,0,0,.4);
+}
+.trans{
+  margin: 0 auto;
+    width: 30%;
+    transform: translate(-170px,0px);
+    background-color:rgba(0,0,0,.4);
+}
+.parallax2wrapper{
+    width: 100vw;
+    height:100vh;
+    background-image: url("images/bci.png");
+    background-repeat:no-repeat;
+    background-size:100%;
+    z-index: 2;
+    position: relative;
+}
+.regular-wrapper {
+    width: 100vw;
+    height:100vh;
+    background-image: url("images/bci.png");
+    background-repeat:no-repeat;
+    background-size:100%;
+    z-index: 2;
+    position: relative;
+}
+.content {
+    transform: translate(-170px,300px);
+    margin: 20px auto;
+    width: 50%;
+    background-color:rgba(0,0,0,.4);
+}
+
+.content p{
+	font-size:.8em;
+}
+
+.transflex{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	flex-direction:column;
+}
+
+.transheader1 p{
+	font-size:2.4em;
+}
+.transheader2 p{
+	color:rgba(255,255,255,.6);
+	font-size:1.1em;
+}

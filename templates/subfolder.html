@@ -43,7 +43,7 @@
         <i id="newfolder-close" class="fas fa-times" onClick="newFolderClose()"></i>
     </div>
     <div class="newfolder-r1">
-        <form id='newfolderform' method='post' action='/rootfolder/'>
+        <form id='newfolderform' method='post' action='/makesubfolder/'>
         <input type="text" name="newfolder-q" class="newfolder-q blueglow">
         </form>
     </div>
@@ -180,9 +180,18 @@
 {% if parent.parent.name == 'genesis' %}
     My Drive <a href="/uploads/mydrive">Home Folder</a>
 {% else %}
-    My Drive <a href="/subfolder/{{parent.parent.id}}">{{parent.parent.name}}</a>
+    <div class="subheaderwrapper">
+    My Drive 
+    <div class="subheadericonwrapper">
+	<i class="fas fa-sort-down"></i>
+    </div>
+    <a href="/subfolder/{{parent.parent.id}}">{{parent.parent.name}}</a>
+    <div class="subheadericonwrapper">
+	<i class="fas fa-sort-down"></i>
+    </div>
     <a href="/subfolder/{{parent.id}}">{{parent.name}}</a>
       <a href="/subfolder/{{parent.child.id}}">{{parent.child.id}}</a>
+     </div>
 
 {% endif %}
    </div>

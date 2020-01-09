@@ -3,7 +3,6 @@
     flex-direction:column;
     width:100%;
     margin-top:1rem;
-    overflow:hidden;
 }
 .qafile{
     margin:.6rem;
@@ -11,7 +10,6 @@
     font-family:arial;
     border-radius:8px;
 
-    overflow:hidden;
 }
 .qafile:last-child{
     border:1px solid black;

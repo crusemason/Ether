@@ -25,6 +25,9 @@
     border:1px solid rgba(0,0,0,.3);
     border-bottom-left-radius:8px;
     border-bottom-right-radius:8px;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
 }
 .qafilea{
     margin:5px;

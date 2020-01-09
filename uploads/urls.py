@@ -2,6 +2,9 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from django.conf.urls import url
+from django.conf import settings # new
+from django.urls import path, include # new
+from django.conf.urls.static import static 
 
 from . import views
 app_name = 'uploads'
