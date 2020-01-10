@@ -38,7 +38,6 @@ $(document).ready(function() {
 
   if ($(".file").addEventListener) {
     $(".file").addEventListener('contextmenu', function(e) {
-      alert("You've tried to open context menu"); //here you draw your own menu
       e.preventDefault();
     }, false);
   } else {
@@ -49,7 +48,6 @@ $(document).ready(function() {
 
 
       //alert("contextmenu"+event);
-      alert(this);
 
 
     });
@@ -130,7 +128,6 @@ $(document).ready(function() {
 
   if ($(".file").addEventListener) {
     $(".file").addEventListener('contextmenu', function(e) {
-      alert("You've tried to open context menu"); //here you draw your own menu
       e.preventDefault();
     }, false);
   } else {
@@ -141,7 +138,6 @@ $(document).ready(function() {
 
 
       //alert("contextmenu"+event);
-      alert(this);
 
 
     });
@@ -217,7 +213,6 @@ $(document).ready(function() {
 
   if ($(".file").addEventListener) {
     $(".file").addEventListener('contextmenu', function(e) {
-      alert("You've tried to open context menu"); //here you draw your own menu
       e.preventDefault();
     }, false);
   } else {
@@ -228,7 +223,6 @@ $(document).ready(function() {
 
 
       //alert("contextmenu"+event);
-      alert(this);
 
 
     });

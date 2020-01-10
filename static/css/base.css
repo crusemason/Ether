@@ -452,3 +452,7 @@ background-color:black;
 .nohover:hover{
 	background-color:none;
 }
+
+#subheaderarrow{
+	margin-right:.3em;
+}

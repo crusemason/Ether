@@ -49,6 +49,12 @@ missinglist = []
 #created = folder dict name is key value is folder id
 created = {}
 
+#list for all uploaded files successful or not
+all_upload = []
+
+#list for files successfully uploaded
+s_upload = []
+
 
 register = template.Library()
 
@@ -248,6 +254,7 @@ def handle_uploaded_file(f, filename, user, mypath):
     with open(path, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+        print('DESTINATION-------------------------'+str(destination))
     p = Profile.objects.get(user=user)
     fname, file_ext = os.path.splitext(path)
     fi = File.objects.create(owner=p, name=str(filename), path=db_path, file_type=file_ext)
