@@ -1,0 +1,142 @@
+Overview of changes in Alarm Clock 0.3.4  "Hipp, hipp"
+===============================================================
+
+Bugs fixed:
+1122500 - Don't cancel the next alarm if alarm triggers a day late
+1137453 - Port to GStreamer 1.0
+
+
+Overview of changes in Alarm Clock 0.3.3  "Squish"
+===============================================================
+
+* Set app indicator title
+
+
+Bugs fixed:
+290733 - Automatically detect daylight savings time
+800635 - Let the WM decide the initial position of the list window
+823585 - Check that media player was created successfully
+908636 - Don't show notifications when alarms are stopped/snoozed
+885059 - Update timestamp when type is changed for active alarms
+977110 - Use segment seeks to prevent playback delays when looping
+824337 - Enable alarm when closing the Edit alarm dialog
+
+
+Overview of changes in Alarm Clock 0.3.2  "Indicate this"
+===============================================================
+
+* Add support for application indicators
+* Countdown label for application indicator
+* New status icon indicating triggered alarms
+
+
+Bugs fixed:
+565302 - Add countdown label (for application indicator)
+610632 - Create ~/.config/autostart if it doesn't exist
+671962 - Add support for libnotify 0.7
+682999 - Properly stop triggered alarms that are not playing sound
+704956 - Add support for application indicators
+706832 - Clicking on status icon should bring up list instead of snoozing
+
+New and updated translations:
+ar, courtesy of Ahmed Mohammed
+ast, courtesy of Xuacu Saturio <xuacusk8@gmail.com>
+be, courtesy of Mikola Tsekhan <mail@tsekhan.com>
+ca, courtesy of I. De Marchi
+cs, courtesy of Oliwer <linuch@centrum.cz>
+de, courtesy of Christoph Wickert
+es, courtesy of Fitoschido <fitoschido@gmail.com>
+et, courtesy of Tarmo Ilves <tarmo.ilves.001@mail.ee>
+fi, courtesy of Jiri Grönroos
+fo, courtesy of Gunleif Joensen
+fr, courtesy of Nicolas Delvaux
+gl, courtesy of Miguel Anxo Bouzada <mbouzada@gmail.com>
+he, courtesy of Yaron <sh.yaron@gmail.com>
+hu, courtesy of Papp Bence <papp.bence89@gmail.com>
+id, courtesy of Arief Setiadi Wibowo <q_thrynx@yahoo.com>
+ja, courtesy of jugger Yamamoto
+ka, courtesy of Giorgi Maghlakelidze <acidlabz@gmail.com>
+la, courtesy of nivek1385 <nivek1385@yeltrahnivek.com>
+nb, courtesy of Johannes H. Jensen <joh@pseudoberries.com>
+nl, courtesy of Rachid
+pl, courtesy of XeonBloomfield
+pt_BR, courtesy of André Gondim <andregondim@ubuntu.com>
+ru, courtesy of Сергій Матрунчик (SkyMan)
+tr, courtesy of Burak Ilgıcıoğlu
+uk, courtesy of Сергій Матрунчик (SkyMan)
+zh_CN, courtesy of Lele Long <schemacs@gmail.com>
+zh_TW, courtesy of Cheng-Chia Tseng <pswo10680@gmail.com>
+
+
+Overview of changes in Alarm Clock 0.3.1  "It's gettin' pretty"
+===============================================================
+
+* Properly toggle alarm-list-window
+* Parse command-line options
+* Add --hidden command-line flag
+* Start --hidden on autostart
+
+
+Bugs fixed:
+558559 - Double-clicking on alarm erratically changes alarm time/duration
+559514 - The alarms list window should be shown when launching the application
+559531 - Remember the alarms list window position
+567564 - repeat once: checkbox does not work in gtk+ 2.20
+567762 - deleting running alarm doesn't cancel them
+
+New and updated translations:
+be, courtesy of Mikola Tsekhan <mail@tsekhan.com>
+bg, courtesy of svilborg
+da, courtesy of nanker
+de, courtesy of Jakob Kramer <Unknown>
+fr, courtesy of Pierre Slamich <pierre.slamich@gmail.com>
+gl, courtesy of Dario <dario.villar.v@gmail.com>
+id, courtesy of Waluyo Adi Siswanto
+ru, courtesy of Misha Shnurapet <Unknown>
+
+
+Overview of changes in Alarm Clock 0.3.0  "Less snooze"
+=======================================================
+
+* Alarm Clock has moved to the notification area and can be started as a normal
+  application
+* An option to autostart Alarm Clock on log in has been added
+* Blink icon when an alarm is triggered
+* General User Interface improvements
+* Improvements to the alarm list window
+* Add sorting of the alarm list
+* Notify bubble improvements - remove per-alarm notify bubble settings
+* Snooze improvements - global snooze settings, enable snooze for timers
+* Add translation support - translations are now done in Launchpad
+
+
+Bugs fixed:
+243153 - No hint bubble when there is a "&" sign in the lable
+334684 - Notification needs to be improved in jaunty
+421098 - Source code an Gentoo QA
+490824 - Sorting alarms on time
+500600 - Update countdown for active alarms in alarm list
+501069 - Remove deprecated gnome-vfs dependency and use gio instead
+501073 - Remove deprecated libgnomeui dependency
+502230 - Properly seek player to start when looping
+
+New and updated translations:
+ar, courtesy of Propeng
+be, courtesy of Mikola Tsekhan <mail@tsekhan.com>
+da, courtesy of nanker
+de, courtesy of theunexpecteds
+es, courtesy of Gonzalo Testa <gonzalogtesta@gmail.com>
+fo, courtesy of Gunleif Joensen
+fr, courtesy of Pierre Slamich <pierre.slamich@gmail.com>
+he, courtesy of Yaron <sh.yaron@gmail.com>
+hi, courtesy of manishmahabir <manishmahabir@yahoo.com>
+hu, courtesy of Gergely Szarka <szarka.honved@gmail.com>
+ja, courtesy of Yuki Kodama
+ms, courtesy of Ibrahim Elias <imen802003@netscape.net>
+nb, courtesy of Johannes H. Jensen <joh@pseudoberries.com>
+nn, courtesy of Håkon Sandsmark
+pl, courtesy of Stanisław Gackowski <launchpad@soeb.eu>
+pt, courtesy of Renato Martins
+pt_BR, courtesy of Gilfran Ribeiro <contato@gilfran.net>
+ru, courtesy of Oleg Koptev <koptev.oleg@gmail.com>
+zh_CN, courtesy of lhquark <lhquark@yahoo.com.cn>

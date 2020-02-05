@@ -11,7 +11,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <link rel="stylesheet" href="{% static "css/basetable.css" %}">
     <link rel="stylesheet" href="{% static "css/menu-style.css" %}">
     <link rel="stylesheet" href="{% static "css/userinfo.css" %}">
     <link rel="stylesheet" href="{% static "css/filecontainer.css" %}">
@@ -128,6 +128,7 @@
   </div>
 
 
+  <div class="headerwrapper">
   <div class="header">
       <input id="searchheader" type="text" name='search' class='search'placeholder="&#xF002;    Search Drive" style="font-family:Arial, FontAwesome" />
       {% include 'includes/searchui.html' %}
@@ -215,6 +216,8 @@
         
    </div>
   </div>
+  </div>
+
   <div class="content">
       {% block content %}
       {% endblock %}

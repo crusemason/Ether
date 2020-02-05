@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.db import transaction
 from django import template
+import os.path
+from os import path as ospath
 import shutil
 from django.db import transaction
 from django.shortcuts import render_to_response
@@ -42,6 +45,7 @@ import re
 # Create your views here.
 fdict = {}
 dirs = []
+nodupdirs = []
 p = []
 pieFact = None
 filedic = {}
@@ -168,6 +172,33 @@ def mydrivetable(request):
     context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me, 'storage':storage}
     return render(request, 'my-drive-table.html', context)
 
+@csrf_exempt
+@login_required(login_url='/users/login/')
+def mydrivetableimagesearch(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    storage = getstorage(pro)
+    me = user.email
+    image_list = File.objects.filter(owner=pro)
+    folder_list = None
+    if pro.gid != 0:
+        g = Folder.objects.get(id=pro.gid)
+        folder_list = Folder.objects.filter(parent=g)
+    qa_list = []
+    x = 0
+
+    for image in image_list:
+        if 'jpeg' or 'png' or 'jpg' in image.file_type:
+            x = x + 1
+            if x == 20:
+                return render(request, 'my-drive-table-imagesearch.html', context)
+            context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me, 'storage':storage}
+
+
+    context = {"image_list":image_list, "qa_list":qa_list, 'folder_list':folder_list, 'me':me, 'storage':storage}
+    return render(request, 'my-drive-table.html', context)
+
+
 
 
 
@@ -232,7 +263,15 @@ def upload(request):
                 storage.close()
             return HttpResponse( '1')
 
-dirs = []
+
+def checkFolderUpload(path):
+    if( ospath.exists(path) ):
+        print("yes")
+    else:
+        return HttpResponse('fail') # if everything is NOT ok
+
+    return
+
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def getDirs(request):
@@ -249,116 +288,122 @@ def getDirs(request):
     return HttpResponse('FAIL!!!!!')
 
 def handle_uploaded_file(f, filename, user, mypath):
-    path = '/home/mason/ether/static/accounts/'+ str(user.email) + '/' + 'genesis/' + mypath + filename
-    db_path = '/accounts/' + str(user.email) + '/' + 'genesis/' + mypath + filename
-    with open(path, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-        print('DESTINATION-------------------------'+str(destination))
-    p = Profile.objects.get(user=user)
-    fname, file_ext = os.path.splitext(path)
-    fi = File.objects.create(owner=p, name=str(filename), path=db_path, file_type=file_ext)
-    filesize= os.path.getsize('/home/mason/ether/static'+fi.path)
-    print('fsize'+str(filesize))
-    p.storage = p.storage + filesize
-    p.save()
-    fi.size = str(filesize)
-    fi.save()
-    count = mypath.count('/')
-    if count == 1:
-        print('my path-----'+mypath)
-        mypath = mypath.replace('/','')
-    else:
-        print('my path-----'+mypath)
-        mypath = re.sub(".*/", "", mypath[:-1])
-    print('mypath-----'+mypath+' count='+str(count))
-    fi.save()
-    return fi
-
+    #create path for uploaded file
+    #path = '/home/mason/ether/static/accounts/'+ str(user.email) + '/' + 'genesis/' + mypath + filename
+    ##create path to store in the database
+    #db_path = '/accounts/' + str(user.email) + '/' + 'genesis/' + mypath + filename
+    ##write file to disk
+    #with open(path, 'wb+') as destination:
+        #for chunk in f.chunks():
+            #destination.write(chunk)
+        #checkFolderUpload(path)
+        #print('DESTINATION-------------------------'+str(destination))
+    ##create file in database
+    #p = Profile.objects.get(user=user)
+    #fname, file_ext = os.path.splitext(path)
+    #fi = File.objects.create(owner=p, name=str(filename), path=db_path, file_type=file_ext)
+    #filesize= os.path.getsize('/home/mason/ether/static'+fi.path)
+    #print('fsize'+str(filesize))
+    #p.storage = p.storage + filesize
+    #p.save()
+    #fi.size = str(filesize)
+    #fi.save()
+    #count = mypath.count('/')
+    #if count == 1:
+        #print('my path-----'+mypath)
+        #mypath = mypath.replace('/','')
+    #else:
+        #print('my path-----'+mypath)
+        #mypath = re.sub(".*/", "", mypath[:-1])
+    #print('mypath-----'+mypath+' count='+str(count))
+    #fi.save()
+    #return fi
+    print("handle upload file")
+#
 
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def foo(request):
-    mylist = []
-    user = request.user
-    print(filedic)
-    pro = Profile.objects.get(user=user)
-    gf = Folder.objects.get(id=pro.gid)
-    if 'paths' in request.POST:
-        paths = request.POST['paths']
-        # doSkwomething with pieFact here...
-
-    print('path='+str(p))
-    files = request.FILES.getlist('file_field')
-    missedfiles = []
-    for fi in files:
-        if fi.name in filedic:
-            f0 = handle_uploaded_file(fi, fi.name, user, filedic[fi.name])
-            f0.save()
-            print('foopath='+filedic[fi.name])
-            temp = filedic[fi.name]
-            count = temp.count('/')
-            if count == 1:
-                print('foo path-----'+temp)
-                temp = temp.replace('/','')
-                print('p='+temp)
-                fdict.setdefault(temp, [])
-                fdict[temp].append(f0.id)
-            else:
-                print('foo path-----'+temp)
-                temp = re.sub(".*/", "", temp[:-1])
-                print('temp-----'+temp+' count='+str(count))
-                fdict.setdefault(temp, [])
-                fdict[temp].append(f0.id)
-        else:
-            missinglist.append(fi.name)
-
-    once = 0
-    capturenext = 0
-    counter = 0
-
-
-    for d in dirs:
-        print(d)
-        if(d in fdict):
-            print('fdict-----------'+str(fdict[d]))
-            mylist1 = []
-            for fd in fdict[d]:
-                print('fd='+str(fd))
-                mylist1.append(fd)
-            index = dirs.index(d)
-            print('index='+str(index))
-            if once == 0:
-                once = 1
-                f = Folder.objects.create(owner=pro, parent=gf, name=d, path=gf.path+d)
-                for my in mylist1:
-                    fi = File.objects.get(id=my)
-                    f.folderfiles.add(fi)
-                    f.save()
-                print('fname----------',f.name)
-                created.update({f.name:f.id})
-                mylist.append(d)
-                print(mylist[0])
-
-            if d in created:
-                pass
-            else:
-                print('fname----------',f.name)
-                print('mylist='+str(dirs[index-1]))
-                pid = created[dirs[index-1]]
-                print('parent id='+str(pid))
-                pf = Folder.objects.get(id=pid)
-                f = Folder.objects.create(owner=pro, parent=pf, name=d, path=pf.path+'/'+d)
-                print(fdict)
-                if  d in fdict:
-                    xx = fdict[d]
-                    print('xx-------'+str(xx))
-                    for x in xx:
-                        print('x='+str(x))
-                        filef = File.objects.get(id=x)
-                        f.folderfiles.add(filef)
-                created.update({f.name:f.id})
-    print(created)
+    #mylist = []
+    #user = request.user
+    #print(filedic)
+    #pro = Profile.objects.get(user=user)
+    #gf = Folder.objects.get(id=pro.gid)
+    #if 'paths' in request.POST:
+        #paths = request.POST['paths']
+        ## doSkwomething with pieFact here...
+#
+    #print('path='+str(p))
+    #files = request.FILES.getlist('file_field')
+    #missedfiles = []
+    #for fi in files:
+        #if fi.name in filedic:
+            #f0 = handle_uploaded_file(fi, fi.name, user, filedic[fi.name])
+            #f0.save()
+            #print('foopath='+filedic[fi.name])
+            #temp = filedic[fi.name]
+            #count = temp.count('/')
+            #if count == 1:
+                #print('foo path-----'+temp)
+                #temp = temp.replace('/','')
+                #print('p='+temp)
+                #fdict.setdefault(temp, [])
+                #fdict[temp].append(f0.id)
+            #else:
+                #print('foo path-----'+temp)
+                #temp = re.sub(".*/", "", temp[:-1])
+                #print('temp-----'+temp+' count='+str(count))
+                #fdict.setdefault(temp, [])
+                #fdict[temp].append(f0.id)
+        #else:
+            #missinglist.append(fi.name)
+#
+    #once = 0
+    #capturenext = 0
+    #counter = 0
+#
+#
+    #for d in dirs:
+        #print(d)
+        #if(d in fdict):
+            #print('fdict-----------'+str(fdict[d]))
+            #mylist1 = []
+            #for fd in fdict[d]:
+                #print('fd='+str(fd))
+                #mylist1.append(fd)
+            #index = dirs.index(d)
+            #print('index='+str(index))
+            #if once == 0:
+                #once = 1
+                #f = Folder.objects.create(owner=pro, parent=gf, name=d, path=gf.path+d)
+                #for my in mylist1:
+                    #fi = File.objects.get(id=my)
+                    #f.folderfiles.add(fi)
+                    #f.save()
+                #print('fname----------',f.name)
+                #created.update({f.name:f.id})
+                #mylist.append(d)
+                #print(mylist[0])
+#
+            #if d in created:
+                #pass
+            #else:
+                #print('fname----------',f.name)
+                #print('mylist='+str(dirs[index-1]))
+                #pid = created[dirs[index-1]]
+                #print('parent id='+str(pid))
+                #pf = Folder.objects.get(id=pid)
+                #f = Folder.objects.create(owner=pro, parent=pf, name=d, path=pf.path+'/'+d)
+                #print(fdict)
+                #if  d in fdict:
+                    #xx = fdict[d]
+                    #print('xx-------'+str(xx))
+                    #for x in xx:
+                        #print('x='+str(x))
+                        #filef = File.objects.get(id=x)
+                        #f.folderfiles.add(filef)
+                #created.update({f.name:f.id})
+    #print(created)
 
     return HttpResponse('in fooo')
 
@@ -367,7 +412,7 @@ def foo(request):
 def handle_upload(request):
     request.upload_handlers.insert(0, foo(request))
 
-    files = request.FILES.getlist('file_field')
+    #files = request.FILES.getlist('file_field')
     return HttpResponse('success') # if everything is OK
 
 @login_required(login_url='/users/login/')
@@ -536,33 +581,63 @@ def makedirs(dirs):
     print(d)
 
 
-
+#gets called for every file and folder uploaded
 @csrf_exempt
+@transaction.atomic
 def my_view_that_updates_pieFact(request):
+    #get the user uploading a folder
     user = request.user
+    print("Folder upload by " + str(user))
+
+    #get the profile for that user
     pro = Profile.objects.get(user=user)
+
+    #get profiles genesis folder id
     gf = Folder.objects.get(id=pro.gid)
     f = Folder()
     if request.method == 'POST':
+        #if pieFact is in POST then a user has uploaded a folder
+        #pieFact contains the path of all uploaded files and folders
         if 'pieFact' in request.POST:
             pieFact = request.POST['pieFact']
+            
+            #parse path
             temp = pieFact
+            print("temp-----",temp)
+
+            #temp is uploaded folder topology
             p = temp.split('/')[-1]
             temp = temp.replace(p,'')
+            print("temp-----",temp)
+
+            #change directoy to genesis folder
             os.chdir('/home/mason/ether/static/accounts/'+str(pro.user)+'/genesis/')
+
+            #make uploaded folders on the server
+            print("making dirs")
             if not os.path.exists(temp):
                 os.makedirs(temp)
 
-            print('p----------'+str(p))
+            #print('p----------'+str(p))
             pieFact = pieFact.split(os.sep)
+            print("pieFact=%s",pieFact)
+            #get filename from path
             fname = pieFact[-1]
-            print('filedic'+str(filedic))
+            print("fname=%s",fname)
+
+            #filedic contains a dict of files where the filename is the key
+            # and the path is the value
             filedic.update({fname:temp})
+            print('filedic'+str(filedic))
+
+            #get all folders from path
             for pie in pieFact[:-1]:
                 dirs.append(pie)
+            #remove any duplicates from dirs
+            for d in dirs:
+                print("d-------- %s",d)
 
-
-            # doSomething with pieFact here...
+            ## doSomething with pieFact here...
             return HttpResponse('success') # if everything is OK
     # nothing went well
     return HttpResponse('FAIL!!!!!')

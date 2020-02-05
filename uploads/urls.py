@@ -21,6 +21,7 @@ urlpatterns = [
         path('handle_upload/', views.handle_upload, name='handle_upload'),
         path('mydrive/', views.mydrive, name='mydrive'),
         path('mydrivetable/', views.mydrivetable, name='mydrivetable'),
+        path('imagesearch/', views.mydrivetableimagesearch, name='mydrivetableimagesearch'),
         path('starred/', views.allStarred, name='allStarred'),
         path('recent/', views.recent, name='recent'),
         url(r'^ajax/validate_upload/$', views.validate_upload, name='validate_username'),

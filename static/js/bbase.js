@@ -5,6 +5,15 @@ function newFolder(){
 
 }
 function t(ele){
+    var elmnt = 0;
+    if(ele){
+    alert(ele+"-------");
+    elmnt = document.getElementById(ele);
+var rect = elmnt.getBoundingClientRect();
+
+console.log(rect.top, rect.right, rect.bottom, rect.left);
+    window.scrollTo(0,-2500)
+    }
     console.log('.list-footer'+ele);
     $('#file-icon').css('color','black');
     $('.sub-wrapper').css('display', 'block');

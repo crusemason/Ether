@@ -1,0 +1,42 @@
+Alarm Clock
+=================
+
+This package contains a program for use with the GNOME panel or equivalent.
+
+Requirements
+------------
+
+You need at least:
+
+    glib-2.16.0
+    gtk-2.12.0
+    gconf-2.0
+    gio-2.0
+    gnome-icon-theme
+    gstreamer-1.0
+    libnotify-0.4.1
+    libxml-2.0
+    unique-1.0
+
+
+Optional dependencies:
+
+    appindicator >= 0.0.7
+
+Application indicator support is automatically detected during configure.
+
+
+Installation
+------------
+
+Unpackage with:
+
+tar zxvf alarm-clock-applet-<VERSION>.tar.gz
+cd alarm-clock-applet-<VERSION>
+
+
+Compile with the usual:
+
+./configure
+make
+make install

@@ -1,0 +1,218 @@
+{% extends 'html/basesearch.html' %}
+
+{% load staticfiles %}
+{% block link %}
+<link rel="stylesheet" href="{% static "css/folders.css" %}">
+<link rel="stylesheet" href="{% static "css/qafilecontainer.css" %}">
+<link rel="stylesheet" href="{% static "css/flexboxgrid.css" %}">
+<link rel="stylesheet" href="{% static "css/fileupload.css" %}">
+<link rel="stylesheet" href="{% static "css/searchresults.css" %}">
+    
+    <script>  
+    $(function(){
+            $("#searchuinput").keyup(function () {
+      var searchq = $("#searchuinput").val();
+      console.log(searchq);
+      $.ajax({
+        type: "POST",
+        url: '/ajax/searchajax/',
+        data: {
+          'searchq': searchq
+        },
+        success: searchSuccess,
+        dataType: 'html'
+        
+
+    });
+    });
+});
+function searchSuccess(data, textStatus, jqXHR){
+      var searchq = $("#searchuinput").val();
+    if(searchq.length === 0){
+
+    $('#search-results-wrapper').css('display','none');
+    $('#searchtypewrapper').css('display','block');
+    }
+    else
+    {
+    $('#search-results-wrapper').css('display','block');
+    $('#searchtypewrapper').css('display','none');
+    }
+    $('#search-results-wrapper').html(data);
+    console.log(data);
+}   
+
+  </script>
+
+    <script>
+        $("#filepicker").change(function(){
+            console.log($(this).val());
+
+
+   $.ajax({
+        url: '/ajax/validate_upload/',
+        data: {
+          'file_field':file_field 
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this username already exists.");
+          }
+        }
+      });
+        });
+    </script>
+    
+	<script>
+	function showsearchui(){
+    $("#searchui").css('display','block');
+    $("#searchtypewrapper").css('display','block');
+    $(".search").css('display','none');
+    document.getElementById("searchuinput").focus();
+    $("#searchuinput").attr('value','Search images');
+	}
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+<script src="{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+<script src="{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
+{# PHOTOS PAGE SCRIPTS #}
+<script src="{% static 'uploads/js/progress-bar-upload.js' %}"></script>
+
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block content1 %}
+
+    {% if qa_list  %}
+    <div>
+    <div class="qafiles-title">Quick Access</div>
+    <div class='qacon'>
+        <div class="qafileflex">
+        {% for image in qa_list %}
+        {% if image.trash == False %}
+        <a href="#" class="qafilea">
+            <div class='qawrapper'>
+            <div class='qacontent'>
+                {% if 'jpeg' or 'png' or 'jpg' in image.file_type %}
+                    <img id="qaimg" src="{% static image.path  %}">
+                {% endif %}
+            </div>
+            <div class='qafooter'>
+                <div class='qafooterwrapper'>
+                <div class='qanamewrapper'>
+                    <i id='qaicon' class="far fa-file-image fa-lg icon"></i>
+                    <span class='qaname'>{{ image.name }}</span>
+                </div>
+                <div class='qadate'>
+                    {{ image.modified }}
+                </div>
+                </div>
+            </div>
+            </div>
+
+
+        </a>
+        {% endif %}
+        {% endfor %}
+
+        </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div onlod="showsearchui()" id="tablewrapper">
+    {% if image_list %}
+    <div id='statictableh' class="searchresultstablewrapper">
+    <div class="searchresultstabletitlewrapper">
+        
+
+        <div class="tablename">
+            <span>Name</span>
+        </div>
+
+        <div class="tablerightwrapper">
+        <div class="tableowner">
+            <span>Owner</span>
+        </div>
+
+        <div class="tablemodified">
+            <span>Last modified</span>
+        </div>
+
+        <div class="tablefilesize">
+            <span>File size</span>
+        </div>
+        </div>
+
+
+    </div>
+    {% for image in image_list %}
+    <div class="tablerowwrapper">
+        <div class="tablenamecontainer">
+        <div class="tableiconwrapper">
+            <i class="fas fa-image"></i>
+        </div>
+        <div class="tablenamewrapper">
+            <span>{{image.name}}</span>
+        </div>
+        </div>
+
+        <div class="tablerightwrapper">
+            <div class="tablerightowner">
+              
+                {% if image.owner.user.email == me %}
+                <span>me</span>
+                {% else %}
+                <span>{{image.owner.user.emai}}</span>
+                {% endif %}
+             
+            </div>
+
+            <div class="tablerightmodified">
+                <span>{{image.modified}}</span>
+            </div>
+
+            <div class="tablerightfilesize">
+                    {% if image.size %}
+                    <span>{{image.size}}</span>
+                    {% else %}
+                    <span id="dash">-</span>
+                    {% endif %}
+            </div>
+
+        </div>
+    </div>
+    
+{% endfor %}
+</div>
+{% endif %}
+</div>
+   
+  
+    {% if not image_list and not qa_list and not folder_list %}
+    <h1>Upload Files/Folders to start</h1>
+    {% endif %}
+</div>
+{% include 'includes/fileupload/fileupload.html' %}      
+{% endblock %}
+
+ {% include 'includes/filecontextfolder.html' %}
+{% block js %}
+    <script>
+function searchclear(){
+    document.getElementById("searchuinput").value = '';
+}
+    </script>
+
+<script src="{% static "js/bbase.js" %}"></script>
+<script src="{% static "js/fileupload.js" %}"></script>
+
+{% endblock %}
+  
+
