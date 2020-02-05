@@ -146,7 +146,7 @@ background-color:#e8f0fe;
 .headerwrapper{
     grid-area: headerwrapper;
     width:calc(100% - 256px);
-    z-index:99999;
+    z-index:1000;
   position:fixed;
   top:0;
   left:256;
