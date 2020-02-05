@@ -232,10 +232,12 @@ def mydrivetrash(request):
 
     if(len(image_list) == 0):
         context = {'folder_list':folder_list, 'storage':storage}
-    if(len(folder_list) == 0):
-        context = {'image_list':image_list, 'storage':storage}
-    if(len(folder_list) != 0 and len(image_list) != 0):
-        context = {"image_list":image_list, 'folder_list':folder_list, 'storage':storage}
+    if(folder_list):
+        if(len(folder_list) == 0):
+            context = {'image_list':image_list, 'storage':storage}
+    if(folder_list and image_list):
+        if(len(folder_list) != 0 and len(image_list) != 0):
+            context = {"image_list":image_list, 'folder_list':folder_list, 'storage':storage}
 
 
     return render(request, 'my-drive-trash.html', context)
@@ -600,7 +602,7 @@ def my_view_that_updates_pieFact(request):
         #pieFact contains the path of all uploaded files and folders
         if 'pieFact' in request.POST:
             pieFact = request.POST['pieFact']
-            
+
             #parse path
             temp = pieFact
             print("temp-----",temp)
