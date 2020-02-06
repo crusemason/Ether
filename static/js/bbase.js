@@ -7,12 +7,10 @@ function newFolder(){
 function t(ele){
     var elmnt = 0;
     if(ele){
-    alert(ele+"-------");
     elmnt = document.getElementById(ele);
-var rect = elmnt.getBoundingClientRect();
+    var rect = elmnt.getBoundingClientRect();
 
-console.log(rect.top, rect.right, rect.bottom, rect.left);
-    window.scrollTo(0,-2500)
+    console.log(rect.top, rect.right, rect.bottom, rect.left);
     }
     console.log('.list-footer'+ele);
     $('#file-icon').css('color','black');
@@ -30,8 +28,15 @@ console.log(rect.top, rect.right, rect.bottom, rect.left);
     $('.list-footer').css('color', 'black');
     $('#file-info'+ele).css('background', '#e8f0fe');
     $('#file-info'+ele).css('color', '#1967d2');
+    if(ele){
+    var position = $('#file-info'+ele).position();
+
+    }
 
     $('.file-icon').css('color','black');
+    var elemnt = document.getElementById(ele);
+    return false;
+
 
 }
 
@@ -44,6 +49,11 @@ function q(ele){
     $('.qaname').css('color', 'black');
     $('#qaname'+ele).css('color', '#1967d2');
     $('.qaicon').css('color','black');
+    if(ele){
+    var element = document.getElementById(ele);
+    element.scrollIntoView();
+    }
+    return false;
 }
 function newFolderClose(){
     $('#newfolder-popup').css('display', 'none');

@@ -143,7 +143,7 @@ function searchSuccess(data, textStatus, jqXHR){
 <div class='flexbox'>
 {% for image in image_list %}
 <div id="f{{image.id}}" class="list-item f-{{image.id}}" onClick='t(this.id)'>
-<a href="#" class="file">
+<a href="#!" class="file">
     <div id='fcontent-{{image.id}}' class="list-content file-content content{{image.id}} file-content" onclick='t()'>
 		{% if image.file %}
 		    <img id="img" src="{{ image.file.url }}">
