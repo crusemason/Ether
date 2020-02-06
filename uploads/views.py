@@ -245,6 +245,7 @@ def mydrivetrash(request):
 @csrf_exempt
 @login_required(login_url='/users/login/')
 def upload(request):
+    firstfolder(request)
 
     if request.method == 'POST':
 
@@ -494,6 +495,33 @@ def removestar(request, slug, pk):
     return render(request, 'home.html', context)
 
 @csrf_exempt
+def firstfolder(request):
+    user = request.user
+    pro = Profile.objects.get(user=user)
+    path = '/home/mason/ether/static/accounts/'+ str(user)
+    print(pro.gid)
+    if pro.gid == 0:
+        os.chdir(path)
+        os.mkdir('genesis')
+        path += '/genesis/'
+        g = Folder.objects.create(path = path, owner=pro, name='genesis')
+
+        os.chdir(path)
+        f = Folder.objects.create(path = path+foldername, owner=pro, name=foldername, parent=g)
+        os.mkdir(foldername)
+        g.children.add(f)
+        g.save()
+
+        pro.gid = g.id
+        pro.save()
+
+        return 1
+    else:
+
+        return 0
+
+
+@csrf_exempt
 def rootfolder(request):
     foldername = request.POST.get('newfolder-q','')
     print(foldername)
@@ -551,12 +579,13 @@ def makesubfolder(request):
     pf.children.add(sf)
     pf.save()
     folder_list = Folder.objects.filter(parent=pf)
-    context = {'folder_list':folder_list}
+    context = {'folder_list':folder_list, 'parent':pf}
     return render(request, 'subfolder.html', context)
 
 
 @csrf_exempt
 def uploadfileat(request):
+    firstfolder(request)
     pf = Folder.objects.get(id=request.session['fid'])
     user = request.user
     pro = Profile.objects.get(user=user)

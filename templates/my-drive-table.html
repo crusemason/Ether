@@ -79,6 +79,7 @@ function searchSuccess(data, textStatus, jqXHR){
 {% endblock %}
 {% block content1 %}
 
+
     {% if qa_list  %}
     <div>
     <div class="qafiles-title">Quick Access</div>
@@ -86,18 +87,21 @@ function searchSuccess(data, textStatus, jqXHR){
         <div class="qafileflex">
         {% for image in qa_list %}
         {% if image.trash == False %}
-        <a href="#" class="qafilea">
+        <a href="#" id="q{{image.id}}" class="qafilea" onclick='q(this.id)'>
             <div class='qawrapper'>
             <div class='qacontent'>
+		{% if image.file %}
+		    <img id="qaimg" src="{{ image.file.url }}">
+                {% endif %}
                 {% if 'jpeg' or 'png' or 'jpg' in image.file_type %}
                     <img id="qaimg" src="{% static image.path  %}">
                 {% endif %}
             </div>
-            <div class='qafooter'>
+            <div id='qfooterq{{image.id}}'class='qafooter'>
                 <div class='qafooterwrapper'>
                 <div class='qanamewrapper'>
-                    <i id='qaicon' class="far fa-file-image fa-lg icon"></i>
-                    <span class='qaname'>{{ image.name }}</span>
+                    <i id='qaicon' class="far fa-file-image fa-lg icon qaicon"></i>
+                    <span id="qanameq{{image.id}}"class='qaname'>{{ image.name }}</span>
                 </div>
                 <div class='qadate'>
                     {{ image.modified }}
@@ -115,8 +119,7 @@ function searchSuccess(data, textStatus, jqXHR){
         </div>
     </div>
     {% endif %}
-
-
+    
     <div id="tablewrapper">
     {% if image_list %}
     <div id='statictableh' class="searchresultstablewrapper">
